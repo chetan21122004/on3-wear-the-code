@@ -9,11 +9,18 @@ export interface Product {
   category: string;
   image: string;
   secondaryImage?: string;
+  gallery?: string[];
   description: string;
+  fullDescription?: string;
   sizes: string[];
   colors: string[];
   featured?: boolean;
   collection?: string;
+  rating?: number;
+  reviews?: number;
+  features?: string[];
+  material?: string;
+  washCare?: string;
 }
 
 export const products: Product[] = [
@@ -24,11 +31,24 @@ export const products: Product[] = [
     category: "T-Shirts",
     image: tshirtImage,
     secondaryImage: tshirtImage,
+    gallery: [tshirtImage, tshirtImage, tshirtImage, tshirtImage],
     description: "Minimalist tech-inspired graphic tee with premium cotton blend. Features subtle circuit board design.",
+    fullDescription: "Minimal streetwear meets code culture. This oversized tee is made with soft cotton and features subtle syntax-inspired prints. Designed for comfort and individuality.",
     sizes: ["S", "M", "L", "XL", "XXL"],
     colors: ["Black", "Charcoal", "White"],
     featured: true,
     collection: "Tech Drop",
+    rating: 4.8,
+    reviews: 132,
+    features: [
+      "100% Premium Cotton",
+      "Oversized Fit",
+      "Available in 3 colors",
+      "Unisex Design",
+      "Printed with eco-friendly ink"
+    ],
+    material: "100% Premium Cotton, 220 GSM",
+    washCare: "Machine wash cold, tumble dry low, do not bleach"
   },
   {
     id: "2",
