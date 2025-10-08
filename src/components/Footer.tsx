@@ -10,8 +10,8 @@ export const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="space-y-4">
-            <Link to="/" className="flex items-center">
-              <span className="text-2xl font-hero font-bold text-[#DDCEB6]">On3</span>
+            <Link to="/" className="flex items-center bg-[#DDCEB6] w-fit rounded-full shadow  shadow-white ">
+             <img src="/logo.png" alt="" className="h-24 w-24 object-contain" />
             </Link>
             <p className="text-sm text-[#DDCEB6]/60">
               Wear The Code. Minimal, expressive streetwear inspired by tech culture.

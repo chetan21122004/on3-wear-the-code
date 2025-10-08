@@ -21,10 +21,10 @@ export const Navbar = () => {
   return (
     <nav className="sticky top-0 z-50 bg-[#191919] backdrop-blur-sm border-b border-border">
       <div className="container mx-auto px-4">
-        <div className="flex items-center h-16 justify-between">
+        <div className="flex items-center h-20 justify-between">
           {/* Logo */}
-          <Link to="/" className="flex items-center">
-            <span className="text-2xl font-hero font-bold text-[#DDCEB6]">On3</span>
+          <Link to="/" className="flex items-center mt-3  bg-[#DDCEB6] top-3 relative rounded-full shadow-white  ">
+            <img src="/logo.png" alt="logo" className="h-24 w-24 object-contain" />
           </Link>
 
           {/* Desktop Navigation */}
