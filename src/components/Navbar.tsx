@@ -19,12 +19,12 @@ export const Navbar = () => {
   ];
 
   return (
-    <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
+    <nav className="sticky top-0 z-50 bg-[#191919] backdrop-blur-sm border-b border-border">
       <div className="container mx-auto px-4">
-        <div className="flex items-center h-20 justify-between ">
+        <div className="flex items-center h-16 justify-between">
           {/* Logo */}
-          <Link to="/" className="flex items-center mt-3 bg-white top-3 relative rounded-full shadow  ">
-            <img src={logo} alt="logo" className="h-24 w-24 object-contain" />
+          <Link to="/" className="flex items-center">
+            <span className="text-2xl font-hero font-bold text-[#DDCEB6]">On3</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -33,7 +33,7 @@ export const Navbar = () => {
               <Link
                 key={link.name}
                 to={link.path}
-                className="text-sm font-heading font-medium text-muted-foreground hover:text-foreground transition-smooth"
+                className="text-sm font-heading font-medium text-[#DDCEB6] hover:text-[#81715D] transition-smooth relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-[#81715D] after:transition-all after:duration-300 hover:after:w-full"
               >
                 {link.name}
               </Link>
@@ -42,15 +42,15 @@ export const Navbar = () => {
 
           {/* Icons */}
           <div className="flex items-center space-x-4">
-            <Button variant="ghost" size="icon" className="text-foreground hover:text-primary">
+            <Button variant="ghost" size="icon" className="text-[#DDCEB6] hover:text-[#81715D]">
               <Search className="h-5 w-5" />
             </Button>
             <Link to="/wishlist">
-              <Button variant="ghost" size="icon" className="text-foreground hover:text-primary">
+              <Button variant="ghost" size="icon" className="text-[#DDCEB6] hover:text-[#81715D]">
                 <Heart className="h-5 w-5" />
               </Button>
             </Link>
-            <Button variant="ghost" size="icon" className="text-foreground hover:text-primary">
+            <Button variant="ghost" size="icon" className="text-[#DDCEB6] hover:text-[#81715D]">
               <ShoppingCart className="h-5 w-5" />
             </Button>
 
