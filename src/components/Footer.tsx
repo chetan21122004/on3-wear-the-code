@@ -5,14 +5,15 @@ import { Button } from "@/components/ui/button";
 
 export const Footer = () => {
   return (
-    <footer className="bg-card border-t border-border mt-20">
+    <footer className="bg-[#191919] border-t border-[#81715D]/20">
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="space-y-4">
-          <Link to="/" className="flex items-center  bg-white w-fit rounded-full shadow  ">
-            <img src="/logo.png" alt="logo" className="h-24 w-24 object-contain" />
-          </Link>            <p className="text-sm text-muted-foreground">
+            <Link to="/" className="flex items-center">
+              <span className="text-2xl font-hero font-bold text-[#DDCEB6]">On3</span>
+            </Link>
+            <p className="text-sm text-[#DDCEB6]/60">
               Wear The Code. Minimal, expressive streetwear inspired by tech culture.
             </p>
             <div className="flex space-x-4">
@@ -20,13 +21,13 @@ export const Footer = () => {
                 href="https://instagram.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-primary transition-smooth"
+                className="text-[#DDCEB6]/60 hover:text-[#81715D] transition-smooth"
               >
                 <Instagram className="h-5 w-5" />
               </a>
               <a
                 href="mailto:hello@on3wear.com"
-                className="text-muted-foreground hover:text-primary transition-smooth"
+                className="text-[#DDCEB6]/60 hover:text-[#81715D] transition-smooth"
               >
                 <Mail className="h-5 w-5" />
               </a>
@@ -35,25 +36,25 @@ export const Footer = () => {
 
           {/* Shop */}
           <div>
-            <h4 className="font-heading font-semibold mb-4">Shop</h4>
+            <h4 className="font-heading font-semibold mb-4 text-[#DDCEB6]">Shop</h4>
             <ul className="space-y-2">
               <li>
-                <Link to="/shop" className="text-sm text-muted-foreground hover:text-foreground transition-smooth">
+                <Link to="/shop" className="text-sm text-[#DDCEB6]/60 hover:text-[#81715D] transition-smooth">
                   All Products
                 </Link>
               </li>
               <li>
-                <Link to="/shop" className="text-sm text-muted-foreground hover:text-foreground transition-smooth">
+                <Link to="/shop" className="text-sm text-[#DDCEB6]/60 hover:text-[#81715D] transition-smooth">
                   T-Shirts
                 </Link>
               </li>
               <li>
-                <Link to="/shop" className="text-sm text-muted-foreground hover:text-foreground transition-smooth">
+                <Link to="/shop" className="text-sm text-[#DDCEB6]/60 hover:text-[#81715D] transition-smooth">
                   Hoodies
                 </Link>
               </li>
               <li>
-                <Link to="/shop" className="text-sm text-muted-foreground hover:text-foreground transition-smooth">
+                <Link to="/shop" className="text-sm text-[#DDCEB6]/60 hover:text-[#81715D] transition-smooth">
                   Lowers
                 </Link>
               </li>
@@ -62,54 +63,59 @@ export const Footer = () => {
 
           {/* Support */}
           <div>
-            <h4 className="font-heading font-semibold mb-4">Support</h4>
+            <h4 className="font-heading font-semibold mb-4 text-[#DDCEB6]">Support</h4>
             <ul className="space-y-2">
               <li>
-                <Link to="/faq" className="text-sm text-muted-foreground hover:text-foreground transition-smooth">
+                <Link to="/faq" className="text-sm text-[#DDCEB6]/60 hover:text-[#81715D] transition-smooth">
                   FAQ
                 </Link>
               </li>
               <li>
-                <Link to="/contact" className="text-sm text-muted-foreground hover:text-foreground transition-smooth">
+                <Link to="/contact" className="text-sm text-[#DDCEB6]/60 hover:text-[#81715D] transition-smooth">
                   Contact Us
                 </Link>
               </li>
               <li>
-                <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-smooth">
-                  Shipping Policy
-                </a>
+                <Link to="/about" className="text-sm text-[#DDCEB6]/60 hover:text-[#81715D] transition-smooth">
+                  About
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-smooth">
-                  Returns
-                </a>
+                <Link to="/blog" className="text-sm text-[#DDCEB6]/60 hover:text-[#81715D] transition-smooth">
+                  Blog
+                </Link>
               </li>
             </ul>
           </div>
 
           {/* Newsletter */}
           <div>
-            <h4 className="font-heading font-semibold mb-4">Stay Updated</h4>
-            <p className="text-sm text-muted-foreground mb-4">
+            <h4 className="font-heading font-semibold mb-4 text-[#DDCEB6]">Stay Updated</h4>
+            <p className="text-sm text-[#DDCEB6]/60 mb-4">
               Subscribe for exclusive drops and codes.
             </p>
             <div className="flex space-x-2">
               <Input
                 type="email"
                 placeholder="Enter email"
-                className="bg-background border-border"
+                className="bg-[#1C1C1C] border-[#81715D]/30 text-[#DDCEB6] placeholder:text-[#DDCEB6]/40"
               />
-              <Button variant="default" className="bg-primary text-primary-foreground hover:bg-primary/90">
+              <Button className="bg-[#81715D] text-[#191919] hover:bg-[#DDCEB6]">
                 Join
               </Button>
             </div>
           </div>
         </div>
 
-        <div className="border-t border-border mt-8 pt-8 text-center">
-          <p className="text-sm text-muted-foreground">
-            © 2025 On3. All rights reserved.
-          </p>
+        <div className="border-t border-[#81715D]/20 mt-8 pt-8">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <p className="text-sm text-[#DDCEB6]/50">
+              © 2025 On3. All rights reserved.
+            </p>
+            <p className="text-sm text-[#DDCEB6]/50 font-mono">
+              &lt;wear_the_code();&gt;
+            </p>
+          </div>
         </div>
       </div>
     </footer>
