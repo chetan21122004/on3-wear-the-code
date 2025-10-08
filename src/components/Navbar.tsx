@@ -3,11 +3,13 @@ import { Link } from "react-router-dom";
 import { ShoppingCart, Heart, Menu, X, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import logo from "/logo.png";
 
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const navLinks = [
+    { name: "Home", path: "/" },
     { name: "Shop", path: "/shop" },
     { name: "Collections", path: "/shop" },
     { name: "About", path: "/about" },
@@ -19,10 +21,10 @@ export const Navbar = () => {
   return (
     <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center h-20 justify-between ">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
-            <span className="text-2xl font-hero font-bold text-foreground">On3</span>
+          <Link to="/" className="flex items-center mt-3 bg-white top-3 relative rounded-full shadow  ">
+            <img src={logo} alt="logo" className="h-24 w-24 object-contain" />
           </Link>
 
           {/* Desktop Navigation */}

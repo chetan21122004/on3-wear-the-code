@@ -10,8 +10,9 @@ export const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="space-y-4">
-            <h3 className="text-2xl font-hero font-bold">On3</h3>
-            <p className="text-sm text-muted-foreground">
+          <Link to="/" className="flex items-center  bg-white w-fit rounded-full shadow  ">
+            <img src="/logo.png" alt="logo" className="h-24 w-24 object-contain" />
+          </Link>            <p className="text-sm text-muted-foreground">
               Wear The Code. Minimal, expressive streetwear inspired by tech culture.
             </p>
             <div className="flex space-x-4">
