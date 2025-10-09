@@ -11,7 +11,7 @@ export const Navbar = () => {
   const navLinks = [
     { name: "Home", path: "/" },
     { name: "Shop", path: "/shop" },
-    { name: "Collections", path: "/shop" },
+    { name: "Collections", path: "/collections" },
     { name: "About", path: "/about" },
     { name: "Blog", path: "/blog" },
     { name: "Keypad", path: "/keypad" },
