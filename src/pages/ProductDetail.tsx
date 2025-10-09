@@ -1,13 +1,16 @@
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { Heart, ShoppingCart, ArrowLeft, ChevronRight, Minus, Plus, Instagram, Share2, Copy } from "lucide-react";
+import { Heart, ShoppingCart, ArrowLeft, ChevronRight, Minus, Plus, Instagram, Share2, Copy, Star, Package2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
+import { Badge } from "@/components/ui/badge";
 import { products } from "@/data/products";
 import { useToast } from "@/hooks/use-toast";
 import { ProductCard } from "@/components/ProductCard";
+import { DeliveryChecker } from "@/components/DeliveryChecker";
+import { OffersSection } from "@/components/OffersSection";
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -156,27 +159,39 @@ const ProductDetail = () => {
           {/* Product Details */}
           <div className="space-y-6">
             <div>
-              <p className="text-sm text-muted-foreground mb-2 font-price">{product.category}</p>
+              <p className="text-sm text-muted-foreground mb-2 font-price uppercase tracking-wide">{product.category}</p>
               <h1 className="text-4xl font-hero font-bold mb-4 text-foreground">{product.name}</h1>
-              <p className="text-3xl font-price font-bold text-primary mb-2">
-                ₹{(product.price / 100).toFixed(2)}
-              </p>
               
               {/* Rating */}
               {product.rating && (
-                <div className="flex items-center gap-2 text-sm">
-                  <div className="flex">
-                    {[...Array(5)].map((_, i) => (
-                      <span key={i} className="text-primary">
-                        {i < Math.floor(product.rating!) ? "★" : "☆"}
-                      </span>
-                    ))}
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="flex items-center gap-1 bg-primary/10 px-3 py-1 rounded-sm">
+                    <Star className="h-4 w-4 fill-primary text-primary" />
+                    <span className="font-price font-semibold text-foreground">{product.rating}</span>
                   </div>
-                  <span className="text-muted-foreground font-price">
-                    {product.rating} ({product.reviews} reviews)
+                  <span className="text-sm text-muted-foreground font-price">
+                    ({product.reviews} reviews)
                   </span>
                 </div>
               )}
+
+              <div className="flex items-baseline gap-3 mb-3">
+                <p className="text-3xl font-price font-bold text-primary">
+                  ₹{(product.price / 100).toFixed(2)}
+                </p>
+                <p className="text-lg font-price text-muted-foreground line-through">
+                  ₹{((product.price * 1.3) / 100).toFixed(2)}
+                </p>
+                <Badge variant="secondary" className="font-price">23% OFF</Badge>
+              </div>
+              
+              <p className="text-xs text-muted-foreground font-price mb-4">Inclusive of all taxes</p>
+
+              {/* Stock Status */}
+              <div className="flex items-center gap-2 mb-4">
+                <Package2 className="h-5 w-5 text-green-500" />
+                <span className="text-sm font-price font-semibold text-green-500">In Stock</span>
+              </div>
             </div>
 
             <p className="text-muted-foreground leading-relaxed font-price">
@@ -264,6 +279,12 @@ const ProductDetail = () => {
             >
               ⚡ Buy Now
             </Button>
+
+            {/* Delivery & Offers */}
+            <div className="space-y-4 pt-6 border-t border-border">
+              <DeliveryChecker />
+              <OffersSection />
+            </div>
 
             {/* Key Features */}
             {product.features && (
@@ -362,6 +383,12 @@ const ProductDetail = () => {
               >
                 Additional Info
               </TabsTrigger>
+              <TabsTrigger 
+                value="faq" 
+                className="font-heading data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none"
+              >
+                FAQ
+              </TabsTrigger>
             </TabsList>
             <TabsContent value="description" className="mt-6">
               <p className="text-muted-foreground leading-relaxed font-price">
@@ -369,21 +396,126 @@ const ProductDetail = () => {
               </p>
             </TabsContent>
             <TabsContent value="reviews" className="mt-6">
-              <div className="space-y-4">
-                <p className="text-muted-foreground font-price">
-                  Customer reviews coming soon. Be the first to review this product!
-                </p>
+              <div className="space-y-6">
+                {/* Rating Summary */}
+                <div className="flex items-start gap-8 pb-6 border-b border-border">
+                  <div className="text-center">
+                    <div className="text-5xl font-price font-bold text-foreground mb-2">
+                      {product.rating || "4.8"}
+                    </div>
+                    <div className="flex gap-1 mb-2">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className="h-5 w-5 fill-primary text-primary" />
+                      ))}
+                    </div>
+                    <p className="text-sm text-muted-foreground font-price">
+                      {product.reviews || 132} Reviews
+                    </p>
+                  </div>
+                  
+                  <div className="flex-1 space-y-2">
+                    {[5, 4, 3, 2, 1].map((star) => (
+                      <div key={star} className="flex items-center gap-3">
+                        <span className="text-sm font-price text-muted-foreground w-8">{star} ★</span>
+                        <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
+                          <div 
+                            className="h-full bg-primary"
+                            style={{ width: `${star === 5 ? 70 : star === 4 ? 20 : 10}%` }}
+                          />
+                        </div>
+                        <span className="text-sm font-price text-muted-foreground w-12">
+                          {star === 5 ? "70%" : star === 4 ? "20%" : "10%"}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Sample Reviews */}
+                <div className="space-y-6">
+                  <div className="border-b border-border pb-6">
+                    <div className="flex items-start justify-between mb-3">
+                      <div>
+                        <p className="font-heading font-semibold text-foreground">Rahul K.</p>
+                        <div className="flex gap-1 mt-1">
+                          {[...Array(5)].map((_, i) => (
+                            <Star key={i} className="h-4 w-4 fill-primary text-primary" />
+                          ))}
+                        </div>
+                      </div>
+                      <p className="text-sm text-muted-foreground font-price">2 weeks ago</p>
+                    </div>
+                    <p className="text-muted-foreground font-price leading-relaxed">
+                      Amazing quality! The fabric is super soft and the fit is perfect. Definitely worth the price.
+                    </p>
+                  </div>
+
+                  <div className="border-b border-border pb-6">
+                    <div className="flex items-start justify-between mb-3">
+                      <div>
+                        <p className="font-heading font-semibold text-foreground">Priya M.</p>
+                        <div className="flex gap-1 mt-1">
+                          {[...Array(4)].map((_, i) => (
+                            <Star key={i} className="h-4 w-4 fill-primary text-primary" />
+                          ))}
+                          <Star className="h-4 w-4 text-primary" />
+                        </div>
+                      </div>
+                      <p className="text-sm text-muted-foreground font-price">1 month ago</p>
+                    </div>
+                    <p className="text-muted-foreground font-price leading-relaxed">
+                      Love the design! Slightly oversized which I like. Fast delivery too.
+                    </p>
+                  </div>
+                </div>
+
                 <Button variant="outline" className="font-heading">Write a Review</Button>
               </div>
             </TabsContent>
             <TabsContent value="additional" className="mt-6">
-              <div className="space-y-3 text-muted-foreground font-price">
-                {product.material && <p><strong className="text-foreground">Material:</strong> {product.material}</p>}
-                {product.washCare && <p><strong className="text-foreground">Wash Care:</strong> {product.washCare}</p>}
-                <p><strong className="text-foreground">SKU:</strong> ON3-{product.id}</p>
-                <p><strong className="text-foreground">Category:</strong> {product.category}</p>
-                {product.collection && <p><strong className="text-foreground">Collection:</strong> {product.collection}</p>}
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="space-y-3 text-muted-foreground font-price">
+                  <p><strong className="text-foreground">SKU:</strong> ON3-{product.id}</p>
+                  <p><strong className="text-foreground">Category:</strong> {product.category}</p>
+                  {product.collection && <p><strong className="text-foreground">Collection:</strong> {product.collection}</p>}
+                  <p><strong className="text-foreground">Weight:</strong> 220 GSM</p>
+                  <p><strong className="text-foreground">Country of Origin:</strong> India</p>
+                </div>
+                <div className="space-y-3 text-muted-foreground font-price">
+                  {product.material && <p><strong className="text-foreground">Material:</strong> {product.material}</p>}
+                  {product.washCare && <p><strong className="text-foreground">Wash Care:</strong> {product.washCare}</p>}
+                  <p><strong className="text-foreground">Fit:</strong> Oversized / Relaxed</p>
+                  <p><strong className="text-foreground">Occasion:</strong> Casual / Streetwear</p>
+                </div>
               </div>
+            </TabsContent>
+            <TabsContent value="faq" className="mt-6">
+              <Accordion type="single" collapsible className="w-full">
+                <AccordionItem value="faq-1">
+                  <AccordionTrigger className="font-heading text-foreground">How is the fit?</AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground font-price">
+                    Our products have an oversized fit. If you prefer a regular fit, we recommend going one size down.
+                  </AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="faq-2">
+                  <AccordionTrigger className="font-heading text-foreground">What is the material quality?</AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground font-price">
+                    We use 100% premium cotton with 220 GSM weight, ensuring durability and comfort. All fabrics are pre-shrunk.
+                  </AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="faq-3">
+                  <AccordionTrigger className="font-heading text-foreground">Do you offer exchanges?</AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground font-price">
+                    Yes! We offer free exchanges within 15 days of delivery. The product must be unused with tags intact.
+                  </AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="faq-4">
+                  <AccordionTrigger className="font-heading text-foreground">How long does delivery take?</AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground font-price">
+                    Standard delivery takes 5-7 business days. We also offer express delivery in select cities (2-3 days).
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
             </TabsContent>
           </Tabs>
         </div>
