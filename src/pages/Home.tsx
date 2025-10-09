@@ -8,6 +8,11 @@ import { Input } from "@/components/ui/input";
 import { ProductCard } from "@/components/ProductCard";
 import { products } from "@/data/products";
 import heroBanner from "@/assets/hero-banner.jpg";
+import insta1 from "@/assets/insta-1.jpg";
+import insta2 from "@/assets/insta-2.jpg";
+import insta3 from "@/assets/insta-3.jpg";
+import insta4 from "@/assets/insta-4.jpg";
+import insta5 from "@/assets/insta-5.jpg";
 
 const Home = () => {
   const [displayText, setDisplayText] = useState("");
@@ -379,11 +384,11 @@ const Home = () => {
           viewport={{ once: true }}
           className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8"
         >
-          {[1, 2, 3, 4, 5].map((i) => (
+          {[insta1, insta2, insta3, insta4, insta5].map((img, i) => (
             <div key={i} className="aspect-square rounded-lg overflow-hidden bg-[#1C1C1C] group cursor-pointer">
               <img
-                src={heroBanner}
-                alt={`Instagram post ${i}`}
+                src={img}
+                alt={`Instagram post ${i + 1}`}
                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
               />
             </div>
