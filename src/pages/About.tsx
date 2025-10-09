@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Code2, Target, Eye, ArrowRight } from "lucide-react";
-import heroImage from "@/assets/hero-banner.jpg";
+import heroImage from "@/assets/about-banner.jpg";
 
 const About = () => {
   const team = [
