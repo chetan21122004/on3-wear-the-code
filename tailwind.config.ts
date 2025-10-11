@@ -52,8 +52,8 @@ export default {
         cream: "hsl(var(--cream))",
       },
       fontFamily: {
-        hero: ['Space Grotesk', 'sans-serif'],
-        heading: ['Poppins', 'sans-serif'],
+        hero: ['Quakiez', 'sans-serif'],
+        heading: ['Quakiez', 'sans-serif'],
         body: ['Inter', 'sans-serif'],
         price: ['DM Sans', 'sans-serif'],
       },

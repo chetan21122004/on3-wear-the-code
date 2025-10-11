@@ -6,6 +6,14 @@
 All colors MUST be HSL.
 */
 
+@font-face {
+  font-family: 'Quakiez';
+  src: url('/fonts/quakiez.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 @layer base {
   :root {
     /* Brand Colors - On3 Streetwear */
@@ -46,8 +54,8 @@ All colors MUST be HSL.
     --dark-bg: 0 0% 13%;
     
     /* Fonts */
-    --font-hero: 'Space Grotesk', sans-serif;
-    --font-heading: 'Poppins', sans-serif;
+    --font-hero: 'Quakiez', sans-serif;
+    --font-heading: 'Quakiez', sans-serif;
     --font-body: 'Inter', sans-serif;
     --font-price: 'DM Sans', sans-serif;
   }
