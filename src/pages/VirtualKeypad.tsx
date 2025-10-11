@@ -281,43 +281,105 @@ const VirtualKeypad = () => {
 
           {/* Keypad Grid */}
           <div className="space-y-3 relative z-10">
+            {/* Animated grid background */}
+            <div className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none opacity-20">
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-br from-taupe/30 via-transparent to-taupe/30"
+                animate={{
+                  backgroundPosition: ['0% 0%', '100% 100%', '0% 0%'],
+                }}
+                transition={{ duration: 10, repeat: Infinity }}
+                style={{ backgroundSize: '200% 200%' }}
+              />
+            </div>
+
             {keys.map((row, rowIndex) => (
-              <div key={rowIndex} className="grid grid-cols-4 gap-3">
-                {row.map((key) => {
+              <motion.div 
+                key={rowIndex} 
+                className="grid grid-cols-4 gap-3"
+                initial={{ opacity: 0, x: rowIndex % 2 === 0 ? -20 : 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: rowIndex * 0.1 }}
+              >
+                {row.map((key, keyIndex) => {
                   const isGlitching = glitchKey === key;
                   const isPulsing = pulseKey === key;
                   
                   return (
                     <motion.div
                       key={key}
+                      className="relative"
                       animate={
                         isGlitching
                           ? {
-                              x: [0, -3, 3, -2, 2, 0],
-                              y: [0, 2, -2, 3, -3, 0],
-                              rotate: [0, -5, 5, -3, 3, 0],
+                              x: [0, -4, 4, -3, 3, 0],
+                              y: [0, 3, -3, 4, -4, 0],
+                              rotate: [0, -8, 8, -5, 5, 0],
                             }
                           : isPulsing
                           ? {
-                              scale: [1, 1.15, 1],
+                              scale: [1, 1.2, 1],
                             }
                           : {}
                       }
                       transition={{ duration: 0.3 }}
+                      whileHover={{ scale: 1.05 }}
                     >
+                      {/* Glow ring around button */}
+                      <motion.div
+                        className="absolute inset-0 rounded-xl bg-gradient-to-br from-taupe/40 to-cream/40 blur-md"
+                        animate={{
+                          opacity: isPulsing ? [0.5, 1, 0.5] : 0.3,
+                          scale: isPulsing ? [1, 1.1, 1] : 1,
+                        }}
+                        transition={{ duration: 1 }}
+                      />
+
                       <Button
-                        className="h-16 text-3xl font-bold bg-gradient-to-br from-cream via-taupe to-cream text-charcoal hover:from-taupe hover:via-cream hover:to-taupe rounded-xl shadow-lg border-2 border-taupe/50 transition-all duration-200 hover:scale-110 active:scale-95 hover:shadow-[0_0_40px_rgba(129,113,93,0.8)] relative overflow-hidden group"
+                        className="h-16 w-full text-3xl font-bold bg-gradient-to-br from-cream via-taupe to-cream text-charcoal hover:from-taupe hover:via-cream hover:to-taupe rounded-xl shadow-lg border-2 border-taupe/60 transition-all duration-300 hover:border-cream active:scale-90 relative overflow-hidden group backdrop-blur-sm"
                         onClick={() => handleKeyPress(key)}
                         disabled={isValidating}
+                        style={{
+                          boxShadow: '0 4px 20px rgba(129, 113, 93, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3)',
+                        }}
                       >
-                        {/* Shine effect */}
-                        <span className="absolute inset-0 bg-gradient-to-r from-transparent via-cream/30 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
-                        <span className="drop-shadow-lg relative z-10">{key}</span>
+                        {/* Animated corner lines */}
+                        <span className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-charcoal/30 rounded-tl-lg" />
+                        <span className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-charcoal/30 rounded-tr-lg" />
+                        <span className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-charcoal/30 rounded-bl-lg" />
+                        <span className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-charcoal/30 rounded-br-lg" />
+
+                        {/* Diagonal shine effect */}
+                        <span className="absolute inset-0 bg-gradient-to-br from-cream/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                        
+                        {/* Sweep shine effect */}
+                        <span className="absolute inset-0 bg-gradient-to-r from-transparent via-cream/40 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
+                        
+                        {/* Symbol with glow */}
+                        <motion.span 
+                          className="drop-shadow-lg relative z-10"
+                          animate={{
+                            textShadow: isPulsing 
+                              ? ['0 0 10px rgba(42, 41, 36, 0.5)', '0 0 20px rgba(42, 41, 36, 0.8)', '0 0 10px rgba(42, 41, 36, 0.5)']
+                              : '0 0 5px rgba(42, 41, 36, 0.3)',
+                          }}
+                          transition={{ duration: 0.5 }}
+                        >
+                          {key}
+                        </motion.span>
+
+                        {/* Ripple effect on hover */}
+                        <motion.span
+                          className="absolute inset-0 border-2 border-cream/50 rounded-xl"
+                          initial={{ scale: 1, opacity: 0 }}
+                          whileHover={{ scale: 1.2, opacity: [0, 0.5, 0] }}
+                          transition={{ duration: 0.6 }}
+                        />
                       </Button>
                     </motion.div>
                   );
                 })}
-              </div>
+              </motion.div>
             ))}
 
             {/* Wide Action Button */}
