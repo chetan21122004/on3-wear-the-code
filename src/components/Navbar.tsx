@@ -9,13 +9,15 @@ export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentLogo, setCurrentLogo] = useState(1); // Start with main logo
   const [hasChanged, setHasChanged] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
   const logos = ["/simplelogo.png", "/logo.png", "/2ndrylogo.png"];
 
   const handleLogoHover = () => {
-    if (!hasChanged) {
-      setCurrentLogo((prev) => (prev + 1) % logos.length);
-      setHasChanged(true);
-    }
+    if (hasChanged) return;
+    setCurrentLogo((prev) => (prev + 1) % logos.length);
+    setHasChanged(true);
+    setIsAnimating(true);
+    window.setTimeout(() => setIsAnimating(false), 300);
   };
 
   const handleLogoLeave = () => {
@@ -43,73 +45,20 @@ export const Navbar = () => {
             onMouseLeave={handleLogoLeave}
           >
             <div className="relative h-24 w-24">
-              {/* Background rotating logos */}
-              {logos.map((logo, index) => (
-                <motion.img
-                  key={`bg-${logo}`}
-                  src={logo}
-                  alt=""
-                  className="absolute inset-0 h-full w-full object-contain opacity-10"
-                  animate={{
-                    rotate: index % 2 === 0 ? 360 : -360,
-                    scale: [1, 1.1, 1],
-                  }}
-                  transition={{
-                    rotate: {
-                      duration: 15 + index * 3,
-                      repeat: Infinity,
-                      ease: "linear",
-                    },
-                    scale: {
-                      duration: 3,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                    },
-                  }}
-                />
-              ))}
-
-              {/* Main cycling logo */}
-              <motion.div
-                className="absolute inset-0 bg-cream rounded-full shadow-lg shadow-taupe/30 overflow-hidden"
-                whileHover={{ scale: 1.05 }}
-              >
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-transparent via-taupe/30 to-transparent"
-                  animate={{
-                    x: ['-200%', '200%'],
-                  }}
-                  transition={{
-                    duration: 3,
-                    repeat: Infinity,
-                    repeatDelay: 1,
-                  }}
-                />
-                <motion.img
-                  key={currentLogo}
-                  src={logos[currentLogo]}
-                  alt="On3 Logo"
-                  className="h-full w-full object-contain relative z-10 p-2"
-                  initial={{ opacity: 0, scale: 0.8, rotate: -10 }}
-                  animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                  exit={{ opacity: 0, scale: 0.8, rotate: 10 }}
-                  transition={{ duration: 0.5 }}
-                  style={{
-                    filter: 'drop-shadow(0 0 10px hsla(var(--taupe) / 0.3))',
-                  }}
-                />
-              </motion.div>
-
-              {/* Spinning ring */}
-              <motion.div
-                className="absolute inset-0 border border-taupe/30 rounded-full"
-                animate={{ rotate: 360 }}
-                transition={{
-                  duration: 8,
-                  repeat: Infinity,
-                  ease: "linear",
+              <div className="absolute inset-0 bg-cream rounded-full shadow-lg shadow-taupe/30 overflow-hidden" />
+              <motion.img
+                key={currentLogo}
+                src={logos[currentLogo]}
+                alt="On3 Logo"
+                className="absolute inset-0 h-full w-full object-contain p-2"
+                initial={isAnimating ? { opacity: 0, scale: 0.9, rotate: -8 } : { opacity: 1, scale: 1, rotate: 0 }}
+                animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                transition={{ duration: 0.25, ease: 'easeOut' }}
+                style={{
+                  filter: isAnimating
+                    ? 'drop-shadow(0 0 12px hsla(var(--taupe) / 0.4))'
+                    : 'drop-shadow(0 0 0 hsla(var(--taupe) / 0))',
                 }}
-                style={{ transform: 'scale(1.15)' }}
               />
             </div>
           </Link>
