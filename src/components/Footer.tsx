@@ -137,7 +137,6 @@ export const Footer = () => {
                 {/* Main cycling logo */}
                 <motion.div
                   className="absolute inset-0 bg-cream rounded-full shadow-lg shadow-taupe/30 overflow-hidden"
-                  whileHover={{ scale: 1.05 }}
                 >
                   <motion.div
                     className="absolute inset-0 bg-gradient-to-r from-transparent via-taupe/30 to-transparent"
@@ -155,9 +154,9 @@ export const Footer = () => {
                     src={logos[currentLogo]}
                     alt="On3 Logo"
                     className="h-full w-full object-contain relative z-10 p-2"
-                    initial={{ opacity: 0, scale: 0.8, rotate: -10 }}
-                    animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                    exit={{ opacity: 0, scale: 0.8, rotate: 10 }}
+                    initial={{ opacity: 0,  rotate: -10 }}
+                    animate={{ opacity: 1,  rotate: 0 }}
+                    exit={{ opacity: 0,  rotate: 10 }}
                     transition={{ duration: 0.5 }}
                     style={{
                       filter: 'drop-shadow(0 0 10px hsla(var(--taupe) / 0.3))',

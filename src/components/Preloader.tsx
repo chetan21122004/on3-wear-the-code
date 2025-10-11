@@ -150,7 +150,7 @@ export const Preloader = () => {
 
           {/* Crazy animated text */}
           <div className="mt-8 text-center">
-            <div className="font-hero text-cream text-2xl font-bold tracking-wider">
+            <div className="font-[quakiez] text-cream text-2xl font-bold tracking-wider">
               {'ON3'.split('').map((char, i) => (
                 <span
                   key={i}
@@ -164,7 +164,7 @@ export const Preloader = () => {
                 </span>
               ))}
             </div>
-            <div className="mt-2 text-taupe text-sm tracking-[0.3em] font-body">
+            <div className="mt-2 text-taupe text-sm tracking-[0.3em] font-[quakiez]">
               WEAR THE CODE
             </div>
           </div>

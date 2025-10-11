@@ -332,29 +332,7 @@ const Shop = () => {
         </div>
       </div>
 
-      {/* Floating Elements */}
-      <Link to="/keypad">
-        <Button
-          size="icon"
-          className="fixed bottom-24 right-6 w-14 h-14 rounded-full bg-[#81715D] hover:bg-[#DDCEB6] text-[#191919] shadow-lg z-50"
-        >
-          <Keyboard className="h-6 w-6" />
-        </Button>
-      </Link>
-
-      <a
-        href="https://wa.me/1234567890"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="fixed bottom-6 right-6 z-50"
-      >
-        <Button
-          size="icon"
-          className="w-14 h-14 rounded-full bg-green-500 hover:bg-green-600 text-white shadow-lg"
-        >
-          <MessageCircle className="h-6 w-6" />
-        </Button>
-      </a>
+    
     </div>
   );
 };
