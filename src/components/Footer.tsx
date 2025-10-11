@@ -236,7 +236,7 @@ export const Footer = () => {
               whileHover={{ x: 5 }}
             >
               <motion.span
-                className="absolute -left-3 top-1/2 -translate-y-1/2 text-taupe"
+                className="absolute -left-5   text-taupe"
                 animate={{ x: [-2, 2, -2], opacity: [0.5, 1, 0.5] }}
                 transition={{ duration: 2, repeat: Infinity }}
               >
@@ -285,7 +285,7 @@ export const Footer = () => {
               whileHover={{ x: 5 }}
             >
               <motion.span
-                className="absolute -left-3 top-1/2 -translate-y-1/2 text-taupe"
+                className="absolute -left-5 text-taupe"
                 animate={{ x: [-2, 2, -2], opacity: [0.5, 1, 0.5] }}
                 transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
               >
@@ -339,7 +339,7 @@ export const Footer = () => {
               whileHover={{ x: 5 }}
             >
               <motion.span
-                className="absolute -left-3 top-1/2 -translate-y-1/2 text-taupe"
+                className="absolute -left-5 text-taupe"
                 animate={{ 
                   scale: [1, 1.3, 1],
                   rotate: [0, 180, 360],
@@ -424,7 +424,7 @@ export const Footer = () => {
               whileHover={{ scale: 1.05 }}
             >
               <motion.span
-                className="absolute -left-2 top-1/2 -translate-y-1/2 text-taupe"
+                className="absolute -left-2 text-taupe"
                 animate={{ 
                   x: [-3, 0, -3],
                   opacity: [0, 1, 0] 
@@ -434,7 +434,7 @@ export const Footer = () => {
                 {'{'} 
               </motion.span>
               <motion.span
-                className="absolute -right-2 top-1/2 -translate-y-1/2 text-taupe"
+                className="absolute -right-3 text-taupe"
                 animate={{ 
                   x: [3, 0, 3],
                   opacity: [0, 1, 0] 

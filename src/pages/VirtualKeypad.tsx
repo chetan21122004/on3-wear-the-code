@@ -65,24 +65,7 @@ const VirtualKeypad = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-charcoal relative overflow-hidden">
-      {/* Crazy animated background with moving lines */}
-      <div className="absolute inset-0">
-        {[...Array(30)].map((_, i) => (
-          <div
-            key={`line-${i}`}
-            className="absolute bg-gradient-to-r from-transparent via-taupe to-transparent"
-            style={{
-              height: `${Math.random() > 0.5 ? '2px' : '1px'}`,
-              top: `${Math.random() * 100}%`,
-              left: '-100%',
-              width: `${Math.random() * 400 + 200}px`,
-              animation: `slide-right ${Math.random() * 1.5 + 0.8}s ease-in-out infinite`,
-              animationDelay: `${Math.random() * 2}s`,
-              opacity: Math.random() * 0.6 + 0.2,
-            }}
-          />
-        ))}
-      </div>
+    
 
       {/* Rotating geometric shapes */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
@@ -101,25 +84,7 @@ const VirtualKeypad = () => {
         ))}
       </div>
 
-      {/* Pulsating glow orbs */}
-      <div className="absolute inset-0 pointer-events-none">
-        {[...Array(8)].map((_, i) => (
-          <div
-            key={`orb-${i}`}
-            className="absolute rounded-full blur-3xl"
-            style={{
-              width: `${Math.random() * 200 + 150}px`,
-              height: `${Math.random() * 200 + 150}px`,
-              background: `radial-gradient(circle, hsla(var(--taupe) / ${Math.random() * 0.2 + 0.1}) 0%, transparent 70%)`,
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
-              animation: `pulse-orb ${Math.random() * 3 + 2}s ease-in-out infinite`,
-              animationDelay: `${Math.random() * 2}s`,
-            }}
-          />
-        ))}
-      </div>
-
+   
       <div className="w-full max-w-sm relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -128,7 +93,7 @@ const VirtualKeypad = () => {
           className="text-center mb-8 relative"
         >
           {/* Spinning symbols around title */}
-          {['⚡', '★', '◆', '●', '☯', '♠'].map((symbol, i) => (
+          {[ '★', '◆', '●', '☯'].map((symbol, i) => (
             <motion.span
               key={i}
               className="absolute text-taupe text-2xl opacity-30"
@@ -142,7 +107,7 @@ const VirtualKeypad = () => {
                 y: Math.sin((i / 6) * Math.PI * 2) * 80,
               }}
               transition={{
-                rotate: { duration: 8, repeat: Infinity, ease: "linear" },
+                rotate: { duration: 1, repeat: Infinity, ease: "linear" },
                 x: { duration: 0 },
                 y: { duration: 0 },
               }}
@@ -153,14 +118,8 @@ const VirtualKeypad = () => {
 
           <motion.h1 
             className="text-5xl md:text-6xl font-hero font-bold mb-4 text-cream relative"
-            animate={{
-              textShadow: [
-                "0 0 20px rgba(221, 206, 182, 0.5), 0 0 40px rgba(129, 113, 93, 0.3)",
-                "0 0 40px rgba(221, 206, 182, 0.8), 0 0 60px rgba(129, 113, 93, 0.5)",
-                "0 0 20px rgba(221, 206, 182, 0.5), 0 0 40px rgba(129, 113, 93, 0.3)",
-              ],
-            }}
-            transition={{ duration: 2, repeat: Infinity }}
+          
+            transition={{ duration: 2 }}
           >
             {'CIPHER PAD'.split('').map((char, i) => (
               <motion.span
@@ -171,7 +130,7 @@ const VirtualKeypad = () => {
                   rotate: [0, 5, 0, -5, 0],
                 }}
                 transition={{
-                  duration: 2,
+                  duration: 4,
                   repeat: Infinity,
                   delay: i * 0.1,
                 }}
@@ -192,17 +151,11 @@ const VirtualKeypad = () => {
         {/* Keypad Container */}
         <motion.div 
           className="bg-gradient-to-br from-charcoal via-charcoal to-taupe/20 rounded-3xl p-6 shadow-2xl border-2 border-taupe/30 relative overflow-hidden backdrop-blur-sm"
-          animate={{
-            boxShadow: [
-              "0 0 30px rgba(129, 113, 93, 0.3), 0 0 60px rgba(129, 113, 93, 0.2)",
-              "0 0 60px rgba(129, 113, 93, 0.6), 0 0 100px rgba(129, 113, 93, 0.3)",
-              "0 0 30px rgba(129, 113, 93, 0.3), 0 0 60px rgba(129, 113, 93, 0.2)",
-            ],
-          }}
+          
           transition={{ duration: 2, repeat: Infinity }}
         >
           {/* Animated corner accents */}
-          {[0, 1, 2, 3].map((corner) => (
+          {[0,3].map((corner) => (
             <motion.div
               key={corner}
               className="absolute w-8 h-8 border-taupe"

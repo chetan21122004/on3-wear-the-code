@@ -44,7 +44,7 @@ export const Navbar = () => {
             onMouseEnter={handleLogoHover}
             onMouseLeave={handleLogoLeave}
           >
-            <div className="relative h-24 w-24">
+            <div className="relative h-24 w-24 top-4">
               <div className="absolute inset-0 bg-cream rounded-full shadow-lg shadow-taupe/30 overflow-hidden" />
               <motion.img
                 key={currentLogo}

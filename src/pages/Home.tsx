@@ -92,10 +92,8 @@ const Home = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1 }}
           >
-            <h1 className="text-7xl md:text-9xl font-hero font-bold text-[#DDCEB6] mb-4">
-              On3
-            </h1>
-            <h2 className="text-4xl md:text-6xl font-hero font-bold text-[#81715D] mb-6">
+          
+            <h2 className="text-4xl md:text-6xl font-[quakiz] font-bold text-[#81715D] mb-6">
               <span className="glitch">Wear The Code</span>
             </h2>
           </motion.div>
