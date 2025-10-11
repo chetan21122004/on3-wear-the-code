@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ShoppingCart, Heart, Menu, X, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -7,19 +7,12 @@ import { motion } from "framer-motion";
 
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [currentLogo, setCurrentLogo] = useState(0);
-  const [isHovering, setIsHovering] = useState(false);
+  const [currentLogo, setCurrentLogo] = useState(1); // Start with main logo
   const logos = ["/simplelogo.png", "/logo.png", "/2ndrylogo.png"];
 
-  useEffect(() => {
-    if (!isHovering) return;
-    
-    const logoInterval = setInterval(() => {
-      setCurrentLogo((prev) => (prev + 1) % logos.length);
-    }, 800);
-
-    return () => clearInterval(logoInterval);
-  }, [isHovering]);
+  const handleLogoHover = () => {
+    setCurrentLogo((prev) => (prev + 1) % logos.length);
+  };
 
   const navLinks = [
     { name: "Home", path: "/" },
@@ -38,11 +31,7 @@ export const Navbar = () => {
           <Link 
             to="/" 
             className="flex items-center relative group"
-            onMouseEnter={() => setIsHovering(true)}
-            onMouseLeave={() => {
-              setIsHovering(false);
-              setCurrentLogo(0);
-            }}
+            onMouseEnter={handleLogoHover}
           >
             <div className="relative h-24 w-24">
               {/* Background rotating logos */}
