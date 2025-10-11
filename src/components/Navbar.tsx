@@ -34,9 +34,11 @@ export const Navbar = () => {
   ];
 
   return (
-    <nav className="sticky top-0 z-50 bg-[#191919] backdrop-blur-sm border-b border-border">
+    <nav className="sticky top-0 z-50 bg-[#191919]/95 backdrop-blur-md border-b border-[#81715D]/20 shadow-[0_8px_32px_rgba(129,113,93,0.15)]">
       <div className="container mx-auto px-4">
-        <div className="flex items-center h-20 justify-between">
+        <div className="flex items-center h-20 justify-between relative">
+          {/* Animated gradient line at top */}
+          <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#81715D] to-transparent opacity-50 animate-pulse" />
           {/* Logo */}
           <Link 
             to="/" 
@@ -45,12 +47,13 @@ export const Navbar = () => {
             onMouseLeave={handleLogoLeave}
           >
             <div className="relative h-24 w-24 top-4">
-              <div className="absolute inset-0 bg-cream rounded-full shadow-lg shadow-taupe/30 overflow-hidden" />
+              <div className="absolute inset-0 bg-cream rounded-full shadow-[0_0_30px_rgba(221,206,182,0.3)] group-hover:shadow-[0_0_50px_rgba(221,206,182,0.5)] overflow-hidden transition-all duration-300 animate-pulse" />
+              <div className="absolute inset-0 bg-gradient-to-br from-[#81715D]/20 to-transparent rounded-full" />
               <motion.img
                 key={currentLogo}
                 src={logos[currentLogo]}
                 alt="On3 Logo"
-                className="absolute inset-0 h-full w-full object-contain p-2"
+                className="absolute inset-0 h-full w-full object-contain p-2 relative z-10"
                 initial={isAnimating ? { opacity: 0, scale: 0.9, rotate: -8 } : { opacity: 1, scale: 1, rotate: 0 }}
                 animate={{ opacity: 1, scale: 1, rotate: 0 }}
                 transition={{ duration: 0.25, ease: 'easeOut' }}
@@ -65,35 +68,58 @@ export const Navbar = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            {navLinks.map((link) => (
+            {navLinks.map((link, index) => (
               <Link
                 key={link.name}
                 to={link.path}
-                className="text-sm font-heading font-medium text-[#DDCEB6] hover:text-[#81715D] transition-smooth relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-[#81715D] after:transition-all after:duration-300 hover:after:w-full"
+                className="text-sm font-heading font-medium text-[#DDCEB6] hover:text-[#81715D] transition-smooth relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-[#81715D] after:transition-all after:duration-300 hover:after:w-full group"
+                style={{ animationDelay: `${index * 0.1}s` }}
               >
-                {link.name}
+                <span className="relative">
+                  {link.name}
+                  <span className="absolute -inset-2 bg-[#81715D]/10 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 blur-sm" />
+                </span>
               </Link>
             ))}
           </div>
 
           {/* Icons */}
-          <div className="flex items-center space-x-4">
-            <Button variant="ghost" size="icon" className="text-[#DDCEB6] hover:text-[#81715D]">
-              <Search className="h-5 w-5" />
+          <div className="flex items-center space-x-2">
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="text-[#DDCEB6] hover:text-[#81715D] hover:bg-[#81715D]/10 relative group shadow-md hover:shadow-[0_0_20px_rgba(129,113,93,0.3)] transition-all duration-300"
+            >
+              <Search className="h-5 w-5 relative z-10" />
+              <span className="absolute inset-0 bg-[#81715D]/20 rounded-md opacity-0 group-hover:opacity-100 animate-pulse" />
             </Button>
             <Link to="/wishlist">
-              <Button variant="ghost" size="icon" className="text-[#DDCEB6] hover:text-[#81715D]">
-                <Heart className="h-5 w-5" />
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="text-[#DDCEB6] hover:text-[#81715D] hover:bg-[#81715D]/10 relative group shadow-md hover:shadow-[0_0_20px_rgba(129,113,93,0.3)] transition-all duration-300"
+              >
+                <Heart className="h-5 w-5 relative z-10" />
+                <span className="absolute inset-0 bg-[#81715D]/20 rounded-md opacity-0 group-hover:opacity-100 animate-pulse" />
               </Button>
             </Link>
-            <Button variant="ghost" size="icon" className="text-[#DDCEB6] hover:text-[#81715D]">
-              <ShoppingCart className="h-5 w-5" />
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="text-[#DDCEB6] hover:text-[#81715D] hover:bg-[#81715D]/10 relative group shadow-md hover:shadow-[0_0_20px_rgba(129,113,93,0.3)] transition-all duration-300"
+            >
+              <ShoppingCart className="h-5 w-5 relative z-10" />
+              <span className="absolute inset-0 bg-[#81715D]/20 rounded-md opacity-0 group-hover:opacity-100 animate-pulse" />
             </Button>
 
             {/* Mobile Menu */}
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild className="md:hidden">
-                <Button variant="ghost" size="icon">
+                <Button 
+                  variant="ghost" 
+                  size="icon"
+                  className="text-[#DDCEB6] hover:text-[#81715D] hover:bg-[#81715D]/10 shadow-md hover:shadow-[0_0_20px_rgba(129,113,93,0.3)] transition-all duration-300"
+                >
                   <Menu className="h-6 w-6" />
                 </Button>
               </SheetTrigger>
