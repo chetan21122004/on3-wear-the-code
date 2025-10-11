@@ -8,15 +8,18 @@ import { motion } from "framer-motion";
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentLogo, setCurrentLogo] = useState(0);
+  const [isHovering, setIsHovering] = useState(false);
   const logos = ["/simplelogo.png", "/logo.png", "/2ndrylogo.png"];
 
   useEffect(() => {
+    if (!isHovering) return;
+    
     const logoInterval = setInterval(() => {
       setCurrentLogo((prev) => (prev + 1) % logos.length);
-    }, 2000);
+    }, 800);
 
     return () => clearInterval(logoInterval);
-  }, []);
+  }, [isHovering]);
 
   const navLinks = [
     { name: "Home", path: "/" },
@@ -32,7 +35,15 @@ export const Navbar = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center h-20 justify-between">
           {/* Logo */}
-          <Link to="/" className="flex items-center relative group">
+          <Link 
+            to="/" 
+            className="flex items-center relative group"
+            onMouseEnter={() => setIsHovering(true)}
+            onMouseLeave={() => {
+              setIsHovering(false);
+              setCurrentLogo(0);
+            }}
+          >
             <div className="relative h-24 w-24">
               {/* Background rotating logos */}
               {logos.map((logo, index) => (
