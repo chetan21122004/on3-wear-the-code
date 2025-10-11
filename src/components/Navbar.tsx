@@ -1,12 +1,22 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ShoppingCart, Heart, Menu, X, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import logo from "/logo.png";
+import { motion } from "framer-motion";
 
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [currentLogo, setCurrentLogo] = useState(0);
+  const logos = ["/simplelogo.png", "/logo.png", "/2ndrylogo.png"];
+
+  useEffect(() => {
+    const logoInterval = setInterval(() => {
+      setCurrentLogo((prev) => (prev + 1) % logos.length);
+    }, 2000);
+
+    return () => clearInterval(logoInterval);
+  }, []);
 
   const navLinks = [
     { name: "Home", path: "/" },
@@ -22,8 +32,77 @@ export const Navbar = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center h-20 justify-between">
           {/* Logo */}
-          <Link to="/" className="flex items-center mt-3  bg-[#DDCEB6] top-3 relative rounded-full shadow-white  ">
-            <img src="/logo.png" alt="logo" className="h-24 w-24 object-contain" />
+          <Link to="/" className="flex items-center relative group">
+            <div className="relative h-24 w-24">
+              {/* Background rotating logos */}
+              {logos.map((logo, index) => (
+                <motion.img
+                  key={`bg-${logo}`}
+                  src={logo}
+                  alt=""
+                  className="absolute inset-0 h-full w-full object-contain opacity-10"
+                  animate={{
+                    rotate: index % 2 === 0 ? 360 : -360,
+                    scale: [1, 1.1, 1],
+                  }}
+                  transition={{
+                    rotate: {
+                      duration: 15 + index * 3,
+                      repeat: Infinity,
+                      ease: "linear",
+                    },
+                    scale: {
+                      duration: 3,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    },
+                  }}
+                />
+              ))}
+
+              {/* Main cycling logo */}
+              <motion.div
+                className="absolute inset-0 bg-cream rounded-full shadow-lg shadow-taupe/30 overflow-hidden"
+                whileHover={{ scale: 1.05 }}
+              >
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-taupe/30 to-transparent"
+                  animate={{
+                    x: ['-200%', '200%'],
+                  }}
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    repeatDelay: 1,
+                  }}
+                />
+                <motion.img
+                  key={currentLogo}
+                  src={logos[currentLogo]}
+                  alt="On3 Logo"
+                  className="h-full w-full object-contain relative z-10 p-2"
+                  initial={{ opacity: 0, scale: 0.8, rotate: -10 }}
+                  animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                  exit={{ opacity: 0, scale: 0.8, rotate: 10 }}
+                  transition={{ duration: 0.5 }}
+                  style={{
+                    filter: 'drop-shadow(0 0 10px hsla(var(--taupe) / 0.3))',
+                  }}
+                />
+              </motion.div>
+
+              {/* Spinning ring */}
+              <motion.div
+                className="absolute inset-0 border border-taupe/30 rounded-full"
+                animate={{ rotate: 360 }}
+                transition={{
+                  duration: 8,
+                  repeat: Infinity,
+                  ease: "linear",
+                }}
+                style={{ transform: 'scale(1.15)' }}
+              />
+            </div>
           </Link>
 
           {/* Desktop Navigation */}
