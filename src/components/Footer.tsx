@@ -3,8 +3,20 @@ import { Instagram, Mail } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
 
 export const Footer = () => {
+  const [currentLogo, setCurrentLogo] = useState(0);
+  const logos = ["/simplelogo.png", "/logo.png", "/2ndrylogo.png"];
+
+  useEffect(() => {
+    const logoInterval = setInterval(() => {
+      setCurrentLogo((prev) => (prev + 1) % logos.length);
+    }, 2000);
+
+    return () => clearInterval(logoInterval);
+  }, []);
+
   return (
     <footer className="bg-charcoal border-t border-taupe/20 relative overflow-hidden">
       {/* Crazy animated background effects */}
@@ -94,19 +106,77 @@ export const Footer = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <Link to="/" className="flex items-center bg-cream w-fit rounded-full shadow-lg shadow-taupe/30 relative group overflow-hidden">
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-transparent via-taupe/30 to-transparent"
-                animate={{
-                  x: ['-200%', '200%'],
-                }}
-                transition={{
-                  duration: 3,
-                  repeat: Infinity,
-                  repeatDelay: 1,
-                }}
-              />
-              <img src="/logo.png" alt="" className="h-24 w-24 object-contain relative z-10" />
+            <Link to="/" className="flex items-center w-fit relative group">
+              <div className="relative h-24 w-24">
+                {/* Background rotating logos */}
+                {logos.map((logo, index) => (
+                  <motion.img
+                    key={`bg-${logo}`}
+                    src={logo}
+                    alt=""
+                    className="absolute inset-0 h-full w-full object-contain opacity-10"
+                    animate={{
+                      rotate: index % 2 === 0 ? 360 : -360,
+                      scale: [1, 1.1, 1],
+                    }}
+                    transition={{
+                      rotate: {
+                        duration: 15 + index * 3,
+                        repeat: Infinity,
+                        ease: "linear",
+                      },
+                      scale: {
+                        duration: 3,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                      },
+                    }}
+                  />
+                ))}
+
+                {/* Main cycling logo */}
+                <motion.div
+                  className="absolute inset-0 bg-cream rounded-full shadow-lg shadow-taupe/30 overflow-hidden"
+                  whileHover={{ scale: 1.05 }}
+                >
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-r from-transparent via-taupe/30 to-transparent"
+                    animate={{
+                      x: ['-200%', '200%'],
+                    }}
+                    transition={{
+                      duration: 3,
+                      repeat: Infinity,
+                      repeatDelay: 1,
+                    }}
+                  />
+                  <motion.img
+                    key={currentLogo}
+                    src={logos[currentLogo]}
+                    alt="On3 Logo"
+                    className="h-full w-full object-contain relative z-10 p-2"
+                    initial={{ opacity: 0, scale: 0.8, rotate: -10 }}
+                    animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                    exit={{ opacity: 0, scale: 0.8, rotate: 10 }}
+                    transition={{ duration: 0.5 }}
+                    style={{
+                      filter: 'drop-shadow(0 0 10px hsla(var(--taupe) / 0.3))',
+                    }}
+                  />
+                </motion.div>
+
+                {/* Spinning ring */}
+                <motion.div
+                  className="absolute inset-0 border border-taupe/30 rounded-full"
+                  animate={{ rotate: 360 }}
+                  transition={{
+                    duration: 8,
+                    repeat: Infinity,
+                    ease: "linear",
+                  }}
+                  style={{ transform: 'scale(1.15)' }}
+                />
+              </div>
             </Link>
             <motion.p 
               className="text-sm text-cream/60 font-body"
