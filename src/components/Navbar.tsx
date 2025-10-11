@@ -8,10 +8,18 @@ import { motion } from "framer-motion";
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentLogo, setCurrentLogo] = useState(1); // Start with main logo
+  const [hasChanged, setHasChanged] = useState(false);
   const logos = ["/simplelogo.png", "/logo.png", "/2ndrylogo.png"];
 
   const handleLogoHover = () => {
-    setCurrentLogo((prev) => (prev + 1) % logos.length);
+    if (!hasChanged) {
+      setCurrentLogo((prev) => (prev + 1) % logos.length);
+      setHasChanged(true);
+    }
+  };
+
+  const handleLogoLeave = () => {
+    setHasChanged(false);
   };
 
   const navLinks = [
@@ -32,6 +40,7 @@ export const Navbar = () => {
             to="/" 
             className="flex items-center relative group"
             onMouseEnter={handleLogoHover}
+            onMouseLeave={handleLogoLeave}
           >
             <div className="relative h-24 w-24">
               {/* Background rotating logos */}
