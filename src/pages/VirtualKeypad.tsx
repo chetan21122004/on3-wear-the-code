@@ -65,46 +65,15 @@ const VirtualKeypad = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-charcoal relative overflow-hidden">
-      {/* Crazy animated background particles */}
-      <div className="absolute inset-0 pointer-events-none">
-        {[...Array(40)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute"
-            initial={{
-              x: Math.random() * window.innerWidth,
-              y: Math.random() * window.innerHeight,
-            }}
-            animate={{
-              x: [
-                Math.random() * window.innerWidth,
-                Math.random() * window.innerWidth,
-                Math.random() * window.innerWidth,
-              ],
-              y: [
-                Math.random() * window.innerHeight,
-                Math.random() * window.innerHeight,
-                Math.random() * window.innerHeight,
-              ],
-              rotate: [0, 360, 0],
-              scale: [1, 1.5, 1],
-            }}
-            transition={{
-              duration: Math.random() * 10 + 10,
-              repeat: Infinity,
-              ease: "linear",
-            }}
-          >
-            <span className="text-taupe opacity-20 text-2xl">
-              {keys.flat()[Math.floor(Math.random() * 16)]}
-            </span>
-          </motion.div>
-        ))}
-      </div>
-
-      {/* Glitch scanlines */}
+      {/* Optimized subtle background grid */}
       <div className="absolute inset-0 pointer-events-none opacity-5">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-taupe to-transparent animate-scan" />
+        <div 
+          className="absolute inset-0" 
+          style={{
+            backgroundImage: 'radial-gradient(circle at 2px 2px, hsl(var(--taupe)) 1px, transparent 0)',
+            backgroundSize: '50px 50px',
+          }}
+        />
       </div>
 
       <div className="w-full max-w-sm relative z-10">
@@ -141,7 +110,7 @@ const VirtualKeypad = () => {
 
         {/* Keypad Container */}
         <motion.div 
-          className="bg-gradient-to-br from-charcoal via-charcoal to-taupe/20 rounded-3xl p-6 shadow-2xl border-2 border-taupe/30 backdrop-blur-sm relative overflow-hidden"
+          className="bg-gradient-to-br from-charcoal via-charcoal to-taupe/20 rounded-3xl p-6 shadow-2xl border-2 border-taupe/30 relative overflow-hidden"
           animate={{
             boxShadow: [
               "0 0 30px rgba(129, 113, 93, 0.3)",
@@ -151,16 +120,6 @@ const VirtualKeypad = () => {
           }}
           transition={{ duration: 2, repeat: Infinity }}
         >
-          {/* Animated background effect */}
-          <div className="absolute inset-0 opacity-10">
-            <motion.div
-              className="absolute inset-0 bg-gradient-to-r from-transparent via-taupe to-transparent"
-              animate={{
-                x: ["-100%", "100%"],
-              }}
-              transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-            />
-          </div>
 
           {/* Display integrated as first key */}
           <div className="mb-4 relative">
@@ -170,16 +129,6 @@ const VirtualKeypad = () => {
                 borderColor: code.length > 0 ? "rgba(221, 206, 182, 0.8)" : "rgba(129, 113, 93, 0.5)",
               }}
             >
-              {/* Glitch overlay on display */}
-              <div className="absolute inset-0 pointer-events-none">
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-transparent via-taupe/10 to-transparent"
-                  animate={{
-                    x: ["-100%", "100%"],
-                  }}
-                  transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
-                />
-              </div>
               {code || (
                 <motion.span 
                   className="text-taupe text-lg tracking-widest"
@@ -219,23 +168,11 @@ const VirtualKeypad = () => {
                       transition={{ duration: 0.3 }}
                     >
                       <Button
-                        className="h-16 text-3xl font-bold bg-gradient-to-br from-cream via-taupe to-cream text-charcoal hover:from-taupe hover:via-cream hover:to-taupe rounded-2xl shadow-lg border-2 border-taupe/50 transition-all duration-200 hover:scale-105 active:scale-95 hover:shadow-[0_0_30px_rgba(129,113,93,0.6)] relative overflow-hidden group"
+                        className="h-16 text-3xl font-bold bg-gradient-to-br from-cream via-taupe to-cream text-charcoal hover:from-taupe hover:via-cream hover:to-taupe rounded-2xl shadow-lg border-2 border-taupe/50 transition-all duration-200 hover:scale-105 active:scale-95 hover:shadow-[0_0_30px_rgba(129,113,93,0.6)]"
                         onClick={() => handleKeyPress(key)}
                         disabled={isValidating}
                       >
-                        {/* Button shine effect */}
-                        <motion.div
-                          className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
-                          animate={{
-                            x: ["-100%", "100%"],
-                          }}
-                          transition={{
-                            duration: 2,
-                            repeat: Infinity,
-                            repeatDelay: Math.random() * 3 + 2,
-                          }}
-                        />
-                        <span className="relative z-10 drop-shadow-lg">{key}</span>
+                        <span className="drop-shadow-lg">{key}</span>
                       </Button>
                     </motion.div>
                   );
@@ -247,33 +184,23 @@ const VirtualKeypad = () => {
             <div className="grid grid-cols-2 gap-3 pt-2">
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Button
-                  className="h-14 w-full bg-gradient-to-r from-red-600 to-red-800 text-cream hover:from-red-700 hover:to-red-900 rounded-2xl shadow-lg font-bold border-2 border-red-500/50 hover:shadow-[0_0_30px_rgba(220,38,38,0.5)] transition-all duration-200 relative overflow-hidden group"
+                  className="h-14 w-full bg-gradient-to-r from-red-600 to-red-800 text-cream hover:from-red-700 hover:to-red-900 rounded-2xl shadow-lg font-bold border-2 border-red-500/50 hover:shadow-[0_0_30px_rgba(220,38,38,0.5)] transition-all duration-200"
                   onClick={handleClear}
                   disabled={isValidating}
                 >
-                  <motion.div
-                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
-                    animate={{ x: ["-100%", "100%"] }}
-                    transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
-                  />
-                  <X className="mr-2 h-5 w-5 relative z-10" />
-                  <span className="relative z-10">✗ CLEAR</span>
+                  <X className="mr-2 h-5 w-5" />
+                  <span>✗ CLEAR</span>
                 </Button>
               </motion.div>
               
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Button
-                  className="h-14 w-full bg-gradient-to-r from-green-600 to-green-800 text-cream hover:from-green-700 hover:to-green-900 rounded-2xl shadow-lg font-bold border-2 border-green-500/50 hover:shadow-[0_0_30px_rgba(34,197,94,0.5)] transition-all duration-200 relative overflow-hidden group disabled:opacity-50"
+                  className="h-14 w-full bg-gradient-to-r from-green-600 to-green-800 text-cream hover:from-green-700 hover:to-green-900 rounded-2xl shadow-lg font-bold border-2 border-green-500/50 hover:shadow-[0_0_30px_rgba(34,197,94,0.5)] transition-all duration-200 disabled:opacity-50"
                   onClick={handleSubmit}
                   disabled={code.length === 0 || isValidating}
                 >
-                  <motion.div
-                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
-                    animate={{ x: ["-100%", "100%"] }}
-                    transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
-                  />
-                  <Check className="mr-2 h-5 w-5 relative z-10" />
-                  <span className="relative z-10">
+                  <Check className="mr-2 h-5 w-5" />
+                  <span>
                     {isValidating ? "⚡⚡⚡" : "✓ ENTER"}
                   </span>
                 </Button>
@@ -295,16 +222,6 @@ const VirtualKeypad = () => {
         </motion.p>
       </div>
 
-      {/* CSS for scan animation */}
-      <style>{`
-        @keyframes scan {
-          0% { transform: translateY(-100%); }
-          100% { transform: translateY(100%); }
-        }
-        .animate-scan {
-          animation: scan 3s linear infinite;
-        }
-      `}</style>
     </div>
   );
 };
