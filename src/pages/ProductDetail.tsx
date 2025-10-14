@@ -71,7 +71,7 @@ const ProductDetail = () => {
     });
   };
 
-  const handleWhatsAppShare = () => {
+  const handleWhatsAppShare = async () => {
     const url = window.location.href;
     
     // Amazon-style WhatsApp message with emojis and formatting
@@ -89,13 +89,50 @@ ${url}
 
 #On3 #WearTheCode #Streetwear`;
 
-    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(whatsappMessage)}`;
-    window.open(whatsappUrl, '_blank');
-    
-    toast({
-      title: "Opening WhatsApp! 💬",
-      description: "Share this amazing product with your friends",
-    });
+    try {
+      // Try to share with image using Web Share API (works on mobile)
+      if (navigator.share && navigator.canShare) {
+        try {
+          // Fetch the product image
+          const response = await fetch(product.image);
+          const blob = await response.blob();
+          const file = new File([blob], `${product.name.replace(/[^a-zA-Z0-9]/g, '_')}.jpg`, { 
+            type: blob.type || 'image/jpeg' 
+          });
+
+          const shareData = {
+            title: product.name,
+            text: whatsappMessage,
+            files: [file]
+          };
+
+          // Check if we can share files
+          if (navigator.canShare(shareData)) {
+            await navigator.share(shareData);
+            return;
+          }
+        } catch (error) {
+          console.log('Image share failed, falling back to text:', error);
+        }
+      }
+
+      // Fallback: Open WhatsApp with text only
+      const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(whatsappMessage)}`;
+      window.open(whatsappUrl, '_blank');
+      
+      toast({
+        title: "Opening WhatsApp! 💬",
+        description: "Share this amazing product with your friends",
+      });
+    } catch (error) {
+      console.error('Share failed:', error);
+      // Final fallback: just copy to clipboard
+      navigator.clipboard.writeText(whatsappMessage + '\n\n' + url);
+      toast({
+        title: "Copied to clipboard! 📋",
+        description: "Paste in WhatsApp to share",
+      });
+    }
   };
 
   const gallery = product.gallery || [product.image, product.secondaryImage || product.image];
