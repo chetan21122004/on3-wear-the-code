@@ -408,6 +408,17 @@ const ProductDetail = () => {
               ⚡ Buy Now
             </Button>
 
+            {/* Native Share Button */}
+            <Button
+              size="lg"
+              variant="outline"
+              className="w-full font-heading transition-smooth group"
+              onClick={() => handleShare('native')}
+            >
+              <Share2 className="mr-2 h-5 w-5 group-hover:rotate-12 transition-transform" />
+              Share Product
+            </Button>
+
             {/* Delivery & Offers */}
             <div className="space-y-4 pt-6 border-t border-border">
               <DeliveryChecker />
