@@ -71,145 +71,31 @@ const ProductDetail = () => {
     });
   };
 
-  const handleShare = async (platform: string) => {
+  const handleWhatsAppShare = () => {
     const url = window.location.href;
-    const productTitle = `${product.name} - ₹${(product.price / 100).toFixed(2)}`;
-    const description = product.description;
-    const shareText = `Check out this amazing ${product.category.toLowerCase()} from On3! 🔥\n\n${productTitle}\n${description}\n\nShop now: ${url}\n\n#On3 #WearTheCode #Streetwear`;
-    const shortText = `Check out ${product.name} at On3! ${url}`;
     
-    setShareModalOpen(false);
+    // Amazon-style WhatsApp message with emojis and formatting
+    const whatsappMessage = 
+`🔥 *${product.name}*
+
+${product.description}
+
+💰 *Price:* ₹${(product.price / 100).toFixed(2)}
+📦 *Category:* ${product.category}
+⭐ *Rating:* ${product.rating || 'New'}/5
+
+🛒 *Shop now on On3:*
+${url}
+
+#On3 #WearTheCode #Streetwear`;
+
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(whatsappMessage)}`;
+    window.open(whatsappUrl, '_blank');
     
-    switch (platform) {
-      case "copy":
-        navigator.clipboard.writeText(url);
-        toast({
-          title: "Link copied! 📋",
-          description: "Product link copied to clipboard",
-        });
-        break;
-        
-      case "whatsapp":
-        const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
-        window.open(whatsappUrl, '_blank');
-        break;
-        
-      case "facebook":
-        const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(shareText)}`;
-        window.open(facebookUrl, '_blank', 'width=600,height=400');
-        break;
-        
-      case "twitter":
-        const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shortText)}&hashtags=On3,WearTheCode,Streetwear`;
-        window.open(twitterUrl, '_blank', 'width=600,height=400');
-        break;
-        
-      case "linkedin":
-        const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
-        window.open(linkedinUrl, '_blank', 'width=600,height=400');
-        break;
-        
-      case "telegram":
-        const telegramUrl = `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(shareText)}`;
-        window.open(telegramUrl, '_blank');
-        break;
-        
-      case "instagram":
-        navigator.clipboard.writeText(url);
-        toast({
-          title: "Link copied! 📋",
-          description: "Paste this link in your Instagram post or story",
-        });
-        break;
-        
-      case "native":
-        if (navigator.share) {
-          // Create Amazon-style share content with rich formatting
-          const shareTitle = `${product.name} - On3 Wear The Code`;
-          const shareDescription = `🔥 ${product.name}\n\n📝 ${product.description}\n\n💰 Price: ₹${(product.price / 100).toFixed(2)}\n📂 Category: ${product.category}\n\n🛒 Shop now on On3 - Wear The Code!\n\n#On3 #WearTheCode #Streetwear`;
-          
-          // First try with image (most comprehensive like Amazon)
-          const tryShareWithImage = async () => {
-            try {
-              const response = await fetch(product.image, {
-                mode: 'cors',
-                cache: 'no-cache'
-              });
-              
-              if (!response.ok) throw new Error('Image fetch failed');
-              
-              const blob = await response.blob();
-              const imageFile = new File([blob], `${product.name.replace(/[^a-zA-Z0-9]/g, '_')}_on3.jpg`, {
-                type: blob.type || 'image/jpeg'
-              });
-              
-              const shareDataWithImage = {
-                title: shareTitle,
-                text: shareDescription,
-                url: url,
-                files: [imageFile]
-              };
-              
-              // Check if browser supports file sharing
-              if (navigator.canShare && navigator.canShare(shareDataWithImage)) {
-                await navigator.share(shareDataWithImage);
-                return true;
-              }
-              throw new Error('File sharing not supported');
-              
-            } catch (error) {
-              console.log('Image sharing failed:', error);
-              return false;
-            }
-          };
-          
-          // Fallback to text + URL sharing
-          const shareTextOnly = async () => {
-            try {
-              await navigator.share({
-                title: shareTitle,
-                text: shareDescription,
-                url: url
-              });
-              return true;
-            } catch (error) {
-              console.log('Text sharing failed:', error);
-              return false;
-            }
-          };
-          
-          // Try image sharing first, then fallback to text
-          const imageShareSuccess = await tryShareWithImage();
-          
-          if (!imageShareSuccess) {
-            const textShareSuccess = await shareTextOnly();
-            
-            if (!textShareSuccess) {
-              // Final fallback - copy rich content to clipboard
-              const clipboardContent = `${shareDescription}\n\n🔗 ${url}`;
-              await navigator.clipboard.writeText(clipboardContent);
-              toast({
-                title: "Rich content copied! 📋",
-                description: "Product details with emojis copied - paste anywhere!",
-              });
-            }
-          }
-          
-        } else {
-          // Browser doesn't support Web Share API
-          const richContent = `🔥 ${product.name}\n\n📝 ${product.description}\n\n💰 Price: ₹${(product.price / 100).toFixed(2)}\n📂 Category: ${product.category}\n\n🛒 Shop now: ${url}\n\n#On3 #WearTheCode #Streetwear`;
-          
-          await navigator.clipboard.writeText(richContent);
-          toast({
-            title: "Rich product details copied! 📋",
-            description: "Paste this formatted content anywhere you want to share",
-          });
-        }
-        break;
-        
-      default:
-        break;
-    }
+    toast({
+      title: "Opening WhatsApp! 💬",
+      description: "Share this amazing product with your friends",
+    });
   };
 
   const gallery = product.gallery || [product.image, product.secondaryImage || product.image];
@@ -408,15 +294,15 @@ const ProductDetail = () => {
               ⚡ Buy Now
             </Button>
 
-            {/* Native Share Button */}
+            {/* WhatsApp Share Button */}
             <Button
               size="lg"
               variant="outline"
-              className="w-full font-heading transition-smooth group"
-              onClick={() => handleShare('native')}
+              className="w-full font-heading transition-smooth group bg-green-500/10 border-green-500/30 hover:bg-green-500/20"
+              onClick={handleWhatsAppShare}
             >
-              <Share2 className="mr-2 h-5 w-5 group-hover:rotate-12 transition-transform" />
-              Share Product
+              <MessageCircle className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform text-green-500" />
+              Share on WhatsApp
             </Button>
 
             {/* Delivery & Offers */}
@@ -472,36 +358,27 @@ const ProductDetail = () => {
             <div className="border-t border-border pt-6">
               <h3 className="font-heading font-semibold mb-3 text-foreground">Share Product:</h3>
               <div className="flex gap-3">
-                {/* Native Share - Primary Action */}
-                {navigator.share && (
-                  <Button
-                    className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90 transition-smooth"
-                    onClick={() => handleShare("native")}
-                  >
-                    <Share2 className="h-5 w-5 mr-2" />
-                    Share Product
-                  </Button>
-                )}
-                
-                {/* Fallback for browsers without native share */}
-                {!navigator.share && (
-                  <Button
-                    variant="outline"
-                    className="flex-1 transition-smooth hover:bg-primary/10"
-                    onClick={() => handleShare("copy")}
-                  >
-                    <Copy className="h-5 w-5 mr-2" />
-                    Copy Product Details
-                  </Button>
-                )}
+                <Button
+                  className="flex-1 bg-green-500 text-white hover:bg-green-600 transition-smooth"
+                  onClick={handleWhatsAppShare}
+                >
+                  <MessageCircle className="h-5 w-5 mr-2" />
+                  Share on WhatsApp
+                </Button>
                 
                 {/* Quick Copy Link */}
                 <Button
                   variant="outline"
                   size="icon"
-                  onClick={() => handleShare("copy")}
+                  onClick={() => {
+                    navigator.clipboard.writeText(window.location.href);
+                    toast({
+                      title: "Link copied! 📋",
+                      description: "Product link copied to clipboard",
+                    });
+                  }}
                   className="transition-smooth hover:bg-primary/10"
-                  title="Copy Link Only"
+                  title="Copy Link"
                 >
                   <Copy className="h-5 w-5" />
                 </Button>
@@ -509,10 +386,7 @@ const ProductDetail = () => {
               
               {/* Share Info */}
               <p className="text-xs text-muted-foreground mt-2 font-price">
-                {navigator.share 
-                  ? "📱 Shares product image, details, and link - just like Amazon!" 
-                  : "📋 Copies rich product details to clipboard"
-                }
+                📱 Shares product details and link on WhatsApp - just like Amazon!
               </p>
             </div>
           </div>
