@@ -335,10 +335,10 @@ ${url}
             <Button
               size="lg"
               variant="outline"
-              className="w-full font-heading transition-smooth group bg-accent/10 border border-accent/30 hover:bg-accent/20"
+              className="w-full font-heading transition-smooth group bg-green-500/10 border-green-500/30 hover:bg-green-500/20"
               onClick={handleWhatsAppShare}
             >
-              <MessageCircle className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform text-accent" />
+              <MessageCircle className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform text-green-500" />
               Share on WhatsApp
             </Button>
 
@@ -396,7 +396,7 @@ ${url}
               <h3 className="font-heading font-semibold mb-3 text-foreground">Share Product:</h3>
               <div className="flex gap-3">
                 <Button
-                  className="flex-1 bg-accent text-accent-foreground hover:bg-accent/90 transition-smooth"
+                  className="flex-1 bg-green-500 text-white hover:bg-green-600 transition-smooth"
                   onClick={handleWhatsAppShare}
                 >
                   <MessageCircle className="h-5 w-5 mr-2" />
