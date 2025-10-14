@@ -80,7 +80,7 @@ const ProductDetail = () => {
         description: "Product link copied to clipboard",
       });
     } else if (platform === "WhatsApp") {
-      const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`;
+      const whatsappUrl = `https://wa.me/919115450293?text=${encodeURIComponent(text + ' ' + url)}`;
       window.open(whatsappUrl, '_blank');
     } else if (platform === "Instagram") {
       // Instagram doesn't support direct sharing via URL, so we copy the link
