@@ -70,16 +70,24 @@ const ProductDetail = () => {
   };
 
   const handleShare = (platform: string) => {
+    const url = window.location.href;
+    const text = `Check out ${product.name} at On3!`;
+    
     if (platform === "copy") {
-      navigator.clipboard.writeText(window.location.href);
+      navigator.clipboard.writeText(url);
       toast({
         title: "Link copied!",
         description: "Product link copied to clipboard",
       });
-    } else {
+    } else if (platform === "WhatsApp") {
+      const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`;
+      window.open(whatsappUrl, '_blank');
+    } else if (platform === "Instagram") {
+      // Instagram doesn't support direct sharing via URL, so we copy the link
+      navigator.clipboard.writeText(url);
       toast({
-        title: `Share on ${platform}`,
-        description: "Opening share dialog...",
+        title: "Link copied!",
+        description: "Paste this link in your Instagram post or story",
       });
     }
   };
@@ -311,9 +319,10 @@ const ProductDetail = () => {
               <AccordionItem value="returns">
                 <AccordionTrigger className="font-heading text-foreground">Return & Exchange Policy</AccordionTrigger>
                 <AccordionContent className="text-muted-foreground font-price">
-                  <p className="mb-2">• Easy 15-day returns</p>
+                  <p className="mb-2">• Easy 7-day returns</p>
+                  <p className="mb-2">• Product must be unused, unwashed, and in original condition with tags intact</p>
                   <p className="mb-2">• Free exchange available</p>
-                  <p>• Full refund if not satisfied</p>
+                  <p>• Full refund (excluding delivery charges) if not satisfied</p>
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="size-guide">
@@ -506,7 +515,7 @@ const ProductDetail = () => {
                 <AccordionItem value="faq-3">
                   <AccordionTrigger className="font-heading text-foreground">Do you offer exchanges?</AccordionTrigger>
                   <AccordionContent className="text-muted-foreground font-price">
-                    Yes! We offer free exchanges within 15 days of delivery. The product must be unused with tags intact.
+                    Yes! We offer free exchanges within 7 days of delivery. The product must be unused, unwashed, and in original condition with tags intact.
                   </AccordionContent>
                 </AccordionItem>
                 <AccordionItem value="faq-4">

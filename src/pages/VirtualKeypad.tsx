@@ -39,7 +39,7 @@ const VirtualKeypad = () => {
   };
 
   const handleClear = () => {
-    setCode("");
+    setCode(code.slice(0, -1));
   };
 
   const handleSubmit = () => {
@@ -342,14 +342,14 @@ const VirtualKeypad = () => {
                 whileTap={{ scale: 0.95 }}
               >
                 <Button
-                  className="h-16 w-full bg-gradient-to-r from-red-600 via-red-700 to-red-800 text-cream hover:from-red-700 hover:via-red-800 hover:to-red-900 rounded-xl shadow-lg font-bold border-2 border-red-500/50 hover:shadow-[0_0_40px_rgba(220,38,38,0.6)] transition-all duration-200 relative overflow-hidden group"
+                  className="h-16 w-full bg-gradient-to-r from-charcoal via-[#2a2924] to-charcoal text-cream hover:from-[#2a2924] hover:via-charcoal hover:to-[#2a2924] rounded-xl shadow-lg font-bold border-2 border-taupe/40 hover:border-taupe/60 transition-all duration-200 relative overflow-hidden group"
                   onClick={handleClear}
-                  disabled={isValidating}
+                  disabled={isValidating || code.length === 0}
                 >
-                  <span className="absolute inset-0 bg-gradient-to-r from-transparent via-red-300/30 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
+                  <span className="absolute inset-0 bg-gradient-to-r from-transparent via-taupe/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
                   <span className="relative z-10 flex items-center justify-center">
                     <X className="mr-2 h-5 w-5" />
-                    CLEAR
+                    BACKSPACE
                   </span>
                 </Button>
               </motion.div>
@@ -359,11 +359,11 @@ const VirtualKeypad = () => {
                 whileTap={{ scale: 0.95 }}
               >
                 <Button
-                  className="h-16 w-full bg-gradient-to-r from-green-600 via-green-700 to-green-800 text-cream hover:from-green-700 hover:via-green-800 hover:to-green-900 rounded-xl shadow-lg font-bold border-2 border-green-500/50 hover:shadow-[0_0_40px_rgba(34,197,94,0.6)] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden group"
+                  className="h-16 w-full bg-gradient-to-r from-[#3d3a32] via-[#4a4740] to-[#3d3a32] text-cream hover:from-[#4a4740] hover:via-[#3d3a32] hover:to-[#4a4740] rounded-xl shadow-lg font-bold border-2 border-taupe/50 hover:border-taupe/70 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden group"
                   onClick={handleSubmit}
                   disabled={code.length === 0 || isValidating}
                 >
-                  <span className="absolute inset-0 bg-gradient-to-r from-transparent via-green-300/30 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
+                  <span className="absolute inset-0 bg-gradient-to-r from-transparent via-taupe/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
                   <motion.span 
                     className="relative z-10 flex items-center justify-center"
                     animate={isValidating ? { opacity: [1, 0.5, 1] } : {}}

@@ -13,7 +13,7 @@ const FAQ = () => {
     },
     {
       question: "What is your return policy?",
-      answer: "We accept returns within 15 days of delivery. Items must be unworn, unwashed, and in original packaging with all tags attached. Refunds are processed within 5-7 business days after we receive the returned item.",
+      answer: "We accept returns within 7 days of delivery. Items must be unused, unwashed, and in original condition with tags intact. Refunds (excluding delivery charges) are processed within 5-7 business days after we receive the returned item.",
     },
     {
       question: "How do I use promo codes?",
