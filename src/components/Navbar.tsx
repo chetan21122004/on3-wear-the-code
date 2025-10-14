@@ -10,7 +10,7 @@ export const Navbar = () => {
   const [currentLogo, setCurrentLogo] = useState(1); // Start with main logo
   const [hasChanged, setHasChanged] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
-  const logos = ["/simplelogo.png", "/logo.png", "/2ndrylogo.png"];
+  const logos = ["/simplelogo.png", "/logo.png"];
 
   const handleLogoHover = () => {
     if (hasChanged) return;

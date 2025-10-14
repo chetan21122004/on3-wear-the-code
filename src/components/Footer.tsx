@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
 
 export const Footer = () => {
   const [currentLogo, setCurrentLogo] = useState(0);
-  const logos = ["/simplelogo.png", "/logo.png", "/2ndrylogo.png"];
+  const logos = ["/simplelogo.png", "/logo.png"];
 
   useEffect(() => {
     const logoInterval = setInterval(() => {
@@ -96,18 +96,18 @@ export const Footer = () => {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-12 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div className="container mx-auto px-4 py-8 md:py-12 relative z-10">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
           {/* Brand */}
-          <motion.div 
-            className="space-y-4"
+          <motion.div
+            className="space-y-4 col-span-2 lg:col-span-1"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <Link to="/" className="flex items-center w-fit relative group">
-              <div className="relative h-24 w-24">
+            <Link to="/" className="flex items-center justify-center sm:justify-start w-fit mx-auto sm:mx-0 relative group">
+              <div className="relative h-20 w-20 md:h-24 md:w-24">
                 {/* Background rotating logos */}
                 {logos.map((logo, index) => (
                   <motion.img
@@ -154,9 +154,9 @@ export const Footer = () => {
                     src={logos[currentLogo]}
                     alt="On3 Logo"
                     className="h-full w-full object-contain relative z-10 p-2"
-                    initial={{ opacity: 0,  rotate: -10 }}
-                    animate={{ opacity: 1,  rotate: 0 }}
-                    exit={{ opacity: 0,  rotate: 10 }}
+                    initial={{ opacity: 0, rotate: -10 }}
+                    animate={{ opacity: 1, rotate: 0 }}
+                    exit={{ opacity: 0, rotate: 10 }}
                     transition={{ duration: 0.5 }}
                     style={{
                       filter: 'drop-shadow(0 0 10px hsla(var(--taupe) / 0.3))',
@@ -177,19 +177,13 @@ export const Footer = () => {
                 />
               </div>
             </Link>
-            <motion.p 
-              className="text-sm text-cream/60 font-body"
-              animate={{
-                opacity: [0.6, 1, 0.6],
-              }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-              }}
+            <motion.p
+              className="text-sm text-cream/50 font-mono relative group order-1 md:order-2"
+              whileHover={{ scale: 1.05 }}
             >
-              Wear The Code. Minimal, expressive streetwear inspired by tech culture.
+              &lt;wear_the_code();&gt;
             </motion.p>
-            <div className="flex space-x-4">
+            <div className="flex space-x-4 justify-center sm:justify-start">
               <motion.a
                 href="https://instagram.com"
                 target="_blank"
@@ -225,12 +219,13 @@ export const Footer = () => {
 
           {/* Shop */}
           <motion.div
+            className="text-center sm:text-left col-span-1"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.1 }}
           >
-            <motion.h4 
+            <motion.h4
               className="font-hero font-semibold mb-4 text-cream relative inline-block"
               whileHover={{ x: 5 }}
             >
@@ -252,8 +247,8 @@ export const Footer = () => {
                   viewport={{ once: true }}
                   transition={{ delay: 0.1 * i }}
                 >
-                  <Link 
-                    to="/shop" 
+                  <Link
+                    to="/shop"
                     className="text-sm text-cream/60 hover:text-taupe transition-all duration-300 relative group inline-block font-body"
                   >
                     <motion.span
@@ -274,12 +269,13 @@ export const Footer = () => {
 
           {/* Support */}
           <motion.div
+            className="text-center sm:text-left col-span-1"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <motion.h4 
+            <motion.h4
               className="font-hero font-semibold mb-4 text-cream relative inline-block"
               whileHover={{ x: 5 }}
             >
@@ -306,8 +302,8 @@ export const Footer = () => {
                   viewport={{ once: true }}
                   transition={{ delay: 0.1 * i }}
                 >
-                  <Link 
-                    to={item.path} 
+                  <Link
+                    to={item.path}
                     className="text-sm text-cream/60 hover:text-taupe transition-all duration-300 relative group inline-block font-body"
                   >
                     <motion.span
@@ -328,21 +324,22 @@ export const Footer = () => {
 
           {/* Newsletter */}
           <motion.div
+            className="col-span-2 lg:col-span-1 text-center sm:text-left"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.3 }}
           >
-            <motion.h4 
+            <motion.h4
               className="font-hero font-semibold mb-4 text-cream relative inline-block"
               whileHover={{ x: 5 }}
             >
               <motion.span
                 className="absolute -left-5 text-taupe"
-                animate={{ 
+                animate={{
                   scale: [1, 1.3, 1],
                   rotate: [0, 180, 360],
-                  opacity: [0.5, 1, 0.5] 
+                  opacity: [0.5, 1, 0.5]
                 }}
                 transition={{ duration: 3, repeat: Infinity }}
               >
@@ -350,26 +347,26 @@ export const Footer = () => {
               </motion.span>
               Stay Updated
             </motion.h4>
-            <motion.p 
+            <motion.p
               className="text-sm text-cream/60 mb-4 font-body"
               animate={{ opacity: [0.6, 1, 0.6] }}
               transition={{ duration: 2, repeat: Infinity, delay: 1 }}
             >
               Subscribe for exclusive drops and codes.
             </motion.p>
-            <div className="flex space-x-2">
-              <motion.div 
+            <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
+              <motion.div
                 className="flex-1 relative"
                 whileFocus={{ scale: 1.02 }}
               >
                 <Input
                   type="email"
                   placeholder="Enter email"
-                  className="bg-charcoal/50 border-taupe/30 text-cream placeholder:text-cream/40 focus:border-taupe focus:ring-1 focus:ring-taupe/50 transition-all backdrop-blur-sm"
+                  className="bg-charcoal/50 border-taupe/30 text-cream placeholder:text-cream/40 focus:border-taupe focus:ring-1 focus:ring-taupe/50 transition-all backdrop-blur-sm w-full"
                 />
               </motion.div>
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button className="bg-taupe text-charcoal hover:bg-cream font-hero font-semibold relative overflow-hidden group">
+                <Button className="bg-taupe text-charcoal hover:bg-cream font-hero font-semibold relative overflow-hidden group w-full sm:w-auto">
                   <motion.span
                     className="absolute inset-0 bg-gradient-to-r from-transparent via-cream/30 to-transparent"
                     animate={{
@@ -388,8 +385,8 @@ export const Footer = () => {
           </motion.div>
         </div>
 
-        <motion.div 
-          className="border-t border-taupe/20 mt-8 pt-8 relative"
+        <motion.div
+          className="border-t border-taupe/20 mt-6 md:mt-8 pt-6 md:pt-8 relative"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
@@ -409,34 +406,34 @@ export const Footer = () => {
             }}
             style={{ width: '50%' }}
           />
-          
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <motion.p 
-              className="text-sm text-cream/50 font-body"
+
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
+            <motion.p
+              className="text-sm text-cream/50 font-body order-2 md:order-1"
               animate={{ opacity: [0.5, 0.8, 0.5] }}
               transition={{ duration: 4, repeat: Infinity }}
             >
               © 2025 On3. All rights reserved.
             </motion.p>
-            <motion.p 
-              className="text-sm text-cream/50 font-mono relative group"
+            <motion.p
+              className="text-sm text-cream/50 font-mono relative group order-1 md:order-2"
               whileHover={{ scale: 1.05 }}
             >
               <motion.span
                 className="absolute -left-2 text-taupe"
-                animate={{ 
+                animate={{
                   x: [-3, 0, -3],
-                  opacity: [0, 1, 0] 
+                  opacity: [0, 1, 0]
                 }}
                 transition={{ duration: 2, repeat: Infinity }}
               >
-                {'{'} 
+                {'{'}
               </motion.span>
               <motion.span
                 className="absolute -right-3 text-taupe"
-                animate={{ 
+                animate={{
                   x: [3, 0, 3],
-                  opacity: [0, 1, 0] 
+                  opacity: [0, 1, 0]
                 }}
                 transition={{ duration: 2, repeat: Infinity }}
               >

@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { Heart, ShoppingCart, ArrowLeft, ChevronRight, Minus, Plus, Instagram, Share2, Copy, Star, Package2 } from "lucide-react";
+import { Heart, ShoppingCart, ArrowLeft, ChevronRight, Minus, Plus, Instagram, Share2, Copy, Star, Package2, Facebook, Twitter, Linkedin, Send, MessageCircle, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { products } from "@/data/products";
 import { useToast } from "@/hooks/use-toast";
 import { ProductCard } from "@/components/ProductCard";
@@ -21,6 +22,7 @@ const ProductDetail = () => {
   const [selectedColor, setSelectedColor] = useState("");
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
+  const [shareModalOpen, setShareModalOpen] = useState(false);
 
   if (!product) {
     return (
@@ -69,26 +71,144 @@ const ProductDetail = () => {
     });
   };
 
-  const handleShare = (platform: string) => {
+  const handleShare = async (platform: string) => {
     const url = window.location.href;
-    const text = `Check out ${product.name} at On3!`;
+    const productTitle = `${product.name} - ₹${(product.price / 100).toFixed(2)}`;
+    const description = product.description;
+    const shareText = `Check out this amazing ${product.category.toLowerCase()} from On3! 🔥\n\n${productTitle}\n${description}\n\nShop now: ${url}\n\n#On3 #WearTheCode #Streetwear`;
+    const shortText = `Check out ${product.name} at On3! ${url}`;
     
-    if (platform === "copy") {
-      navigator.clipboard.writeText(url);
-      toast({
-        title: "Link copied!",
-        description: "Product link copied to clipboard",
-      });
-    } else if (platform === "WhatsApp") {
-      const whatsappUrl = `https://wa.me/919115450293?text=${encodeURIComponent(text + ' ' + url)}`;
-      window.open(whatsappUrl, '_blank');
-    } else if (platform === "Instagram") {
-      // Instagram doesn't support direct sharing via URL, so we copy the link
-      navigator.clipboard.writeText(url);
-      toast({
-        title: "Link copied!",
-        description: "Paste this link in your Instagram post or story",
-      });
+    setShareModalOpen(false);
+    
+    switch (platform) {
+      case "copy":
+        navigator.clipboard.writeText(url);
+        toast({
+          title: "Link copied! 📋",
+          description: "Product link copied to clipboard",
+        });
+        break;
+        
+      case "whatsapp":
+        const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
+        window.open(whatsappUrl, '_blank');
+        break;
+        
+      case "facebook":
+        const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(shareText)}`;
+        window.open(facebookUrl, '_blank', 'width=600,height=400');
+        break;
+        
+      case "twitter":
+        const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shortText)}&hashtags=On3,WearTheCode,Streetwear`;
+        window.open(twitterUrl, '_blank', 'width=600,height=400');
+        break;
+        
+      case "linkedin":
+        const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
+        window.open(linkedinUrl, '_blank', 'width=600,height=400');
+        break;
+        
+      case "telegram":
+        const telegramUrl = `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(shareText)}`;
+        window.open(telegramUrl, '_blank');
+        break;
+        
+      case "instagram":
+        navigator.clipboard.writeText(url);
+        toast({
+          title: "Link copied! 📋",
+          description: "Paste this link in your Instagram post or story",
+        });
+        break;
+        
+      case "native":
+        if (navigator.share) {
+          // Create Amazon-style share content with rich formatting
+          const shareTitle = `${product.name} - On3 Wear The Code`;
+          const shareDescription = `🔥 ${product.name}\n\n📝 ${product.description}\n\n💰 Price: ₹${(product.price / 100).toFixed(2)}\n📂 Category: ${product.category}\n\n🛒 Shop now on On3 - Wear The Code!\n\n#On3 #WearTheCode #Streetwear`;
+          
+          // First try with image (most comprehensive like Amazon)
+          const tryShareWithImage = async () => {
+            try {
+              const response = await fetch(product.image, {
+                mode: 'cors',
+                cache: 'no-cache'
+              });
+              
+              if (!response.ok) throw new Error('Image fetch failed');
+              
+              const blob = await response.blob();
+              const imageFile = new File([blob], `${product.name.replace(/[^a-zA-Z0-9]/g, '_')}_on3.jpg`, {
+                type: blob.type || 'image/jpeg'
+              });
+              
+              const shareDataWithImage = {
+                title: shareTitle,
+                text: shareDescription,
+                url: url,
+                files: [imageFile]
+              };
+              
+              // Check if browser supports file sharing
+              if (navigator.canShare && navigator.canShare(shareDataWithImage)) {
+                await navigator.share(shareDataWithImage);
+                return true;
+              }
+              throw new Error('File sharing not supported');
+              
+            } catch (error) {
+              console.log('Image sharing failed:', error);
+              return false;
+            }
+          };
+          
+          // Fallback to text + URL sharing
+          const shareTextOnly = async () => {
+            try {
+              await navigator.share({
+                title: shareTitle,
+                text: shareDescription,
+                url: url
+              });
+              return true;
+            } catch (error) {
+              console.log('Text sharing failed:', error);
+              return false;
+            }
+          };
+          
+          // Try image sharing first, then fallback to text
+          const imageShareSuccess = await tryShareWithImage();
+          
+          if (!imageShareSuccess) {
+            const textShareSuccess = await shareTextOnly();
+            
+            if (!textShareSuccess) {
+              // Final fallback - copy rich content to clipboard
+              const clipboardContent = `${shareDescription}\n\n🔗 ${url}`;
+              await navigator.clipboard.writeText(clipboardContent);
+              toast({
+                title: "Rich content copied! 📋",
+                description: "Product details with emojis copied - paste anywhere!",
+              });
+            }
+          }
+          
+        } else {
+          // Browser doesn't support Web Share API
+          const richContent = `🔥 ${product.name}\n\n📝 ${product.description}\n\n💰 Price: ₹${(product.price / 100).toFixed(2)}\n📂 Category: ${product.category}\n\n🛒 Shop now: ${url}\n\n#On3 #WearTheCode #Streetwear`;
+          
+          await navigator.clipboard.writeText(richContent);
+          toast({
+            title: "Rich product details copied! 📋",
+            description: "Paste this formatted content anywhere you want to share",
+          });
+        }
+        break;
+        
+      default:
+        break;
     }
   };
 
@@ -339,33 +459,50 @@ const ProductDetail = () => {
 
             {/* Social Sharing */}
             <div className="border-t border-border pt-6">
-              <h3 className="font-heading font-semibold mb-3 text-foreground">Share:</h3>
+              <h3 className="font-heading font-semibold mb-3 text-foreground">Share Product:</h3>
               <div className="flex gap-3">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => handleShare("Instagram")}
-                  className="transition-smooth hover:bg-primary/10"
-                >
-                  <Instagram className="h-5 w-5" />
-                </Button>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => handleShare("WhatsApp")}
-                  className="transition-smooth hover:bg-primary/10"
-                >
-                  <Share2 className="h-5 w-5" />
-                </Button>
+                {/* Native Share - Primary Action */}
+                {navigator.share && (
+                  <Button
+                    className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90 transition-smooth"
+                    onClick={() => handleShare("native")}
+                  >
+                    <Share2 className="h-5 w-5 mr-2" />
+                    Share Product
+                  </Button>
+                )}
+                
+                {/* Fallback for browsers without native share */}
+                {!navigator.share && (
+                  <Button
+                    variant="outline"
+                    className="flex-1 transition-smooth hover:bg-primary/10"
+                    onClick={() => handleShare("copy")}
+                  >
+                    <Copy className="h-5 w-5 mr-2" />
+                    Copy Product Details
+                  </Button>
+                )}
+                
+                {/* Quick Copy Link */}
                 <Button
                   variant="outline"
                   size="icon"
                   onClick={() => handleShare("copy")}
                   className="transition-smooth hover:bg-primary/10"
+                  title="Copy Link Only"
                 >
                   <Copy className="h-5 w-5" />
                 </Button>
               </div>
+              
+              {/* Share Info */}
+              <p className="text-xs text-muted-foreground mt-2 font-price">
+                {navigator.share 
+                  ? "📱 Shares product image, details, and link - just like Amazon!" 
+                  : "📋 Copies rich product details to clipboard"
+                }
+              </p>
             </div>
           </div>
         </div>
