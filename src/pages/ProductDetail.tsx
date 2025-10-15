@@ -391,41 +391,7 @@ ${url}
               </AccordionItem>
             </Accordion>
 
-            {/* Social Sharing */}
-            <div className="border-t border-border pt-6">
-              <h3 className="font-heading font-semibold mb-3 text-foreground">Share Product:</h3>
-              <div className="flex gap-3">
-                <Button
-                  className="flex-1 bg-green-500 text-white hover:bg-green-600 transition-smooth"
-                  onClick={handleWhatsAppShare}
-                >
-                  <MessageCircle className="h-5 w-5 mr-2" />
-                  Share on WhatsApp
-                </Button>
-                
-                {/* Quick Copy Link */}
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => {
-                    navigator.clipboard.writeText(window.location.href);
-                    toast({
-                      title: "Link copied! 📋",
-                      description: "Product link copied to clipboard",
-                    });
-                  }}
-                  className="transition-smooth hover:bg-primary/10"
-                  title="Copy Link"
-                >
-                  <Copy className="h-5 w-5" />
-                </Button>
-              </div>
-              
-              {/* Share Info */}
-              <p className="text-xs text-muted-foreground mt-2 font-price">
-                📱 Shares product details and link on WhatsApp - just like Amazon!
-              </p>
-            </div>
+          
           </div>
         </div>
 
