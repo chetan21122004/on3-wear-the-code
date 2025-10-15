@@ -4,7 +4,7 @@ export const Preloader = () => {
   const [isVisible, setIsVisible] = useState(true);
   const [currentLogo, setCurrentLogo] = useState(0);
   const [glitchActive, setGlitchActive] = useState(false);
-  const logos = ["/simplelogo.png", "/logo.png", "/2ndrylogo.png"];
+  const logos = ["/simplelogo.png", "/logo.png"];
 
   useEffect(() => {
     const timer = setTimeout(() => {
