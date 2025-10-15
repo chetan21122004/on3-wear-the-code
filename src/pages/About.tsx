@@ -149,9 +149,11 @@ const About = () => {
               The Philosophy Behind <span className="glitch">"Wear The Code"</span>
             </h2>
             <p className="text-[#DDCEB6]/80 text-lg font-body leading-relaxed mb-12">
-              Inspired by coding, tech, and digital minimalism, our designs feature subtle code-inspired prints and clean aesthetics. 
-              We create streetwear for those who see fashion as another form of creative expression — where every piece is a statement, 
-              every design is intentional, and every thread tells a story of innovation and individuality.
+              On3 is more than a streetwear label — it's a code of individuality.
+              We stand for the fearless, the expressive, the unapologetic.
+              Our philosophy is simple: wear what defines you, not what confines you.
+              Each drop is a new chapter in a larger story — one written by you.
+              Wear the Code. Live your Story.
             </p>
 
             <div className="grid md:grid-cols-3 gap-6 mt-16">
