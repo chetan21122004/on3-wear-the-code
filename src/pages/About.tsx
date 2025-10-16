@@ -112,7 +112,7 @@ const About = () => {
                 <h3 className="text-3xl font-hero font-bold text-[#DDCEB6]">Mission</h3>
               </div>
               <p className="text-[#DDCEB6]/80 text-lg font-body leading-relaxed">
-                To empower individuality through minimal yet expressive streetwear that bridges the gap between technology culture and urban fashion.
+                To empower individuality through minimal yet expressive streetwear that bridges the gap between fashion and identity
               </p>
             </motion.div>
 
