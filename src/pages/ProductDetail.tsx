@@ -7,16 +7,25 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { products } from "@/data/products";
 import { useToast } from "@/hooks/use-toast";
+import { useProduct } from "@/hooks/useProducts";
 import { ProductCard } from "@/components/ProductCard";
 import { DeliveryChecker } from "@/components/DeliveryChecker";
 import { OffersSection } from "@/components/OffersSection";
+import { useAuth } from "@/contexts/AuthContext";
+import { useAddToCart } from "@/hooks/useCart";
+import { useAddToWishlist, useIsInWishlist } from "@/hooks/useWishlist";
 
 const ProductDetail = () => {
   const { id } = useParams();
   const { toast } = useToast();
-  const product = products.find((p) => p.id === id);
+  const { user } = useAuth();
+  const { data: product, isLoading, error } = useProduct(id || '');
+  
+  // Cart and Wishlist hooks
+  const addToCartMutation = useAddToCart();
+  const addToWishlistMutation = useAddToWishlist();
+  const { data: isInWishlist } = useIsInWishlist(id || '');
 
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
@@ -24,7 +33,18 @@ const ProductDetail = () => {
   const [selectedImage, setSelectedImage] = useState(0);
   const [shareModalOpen, setShareModalOpen] = useState(false);
 
-  if (!product) {
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-8 h-8 animate-spin rounded-full border-b-2 border-[#81715D] mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading product...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !product) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
@@ -37,11 +57,25 @@ const ProductDetail = () => {
     );
   }
 
-  const relatedProducts = products.filter(
-    (p) => p.category === product.category && p.id !== product.id
-  ).slice(0, 4);
+  // Get available sizes and colors from variants
+  const availableSizes = [...new Set(product.product_variants?.map(v => v.size).filter(Boolean) || [])];
+  const availableColors = [...new Set(product.product_variants?.map(v => v.color).filter(Boolean) || [])];
+  
+  // Get product images
+  const productImages = product.product_images || [];
+  const primaryImage = productImages.find(img => img.is_primary)?.image_url || productImages[0]?.image_url || '/placeholder.jpg';
+  const gallery = productImages.map(img => img.image_url);
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
+    if (!user) {
+      toast({
+        title: "Sign in required",
+        description: "Please sign in to add items to cart",
+        variant: "destructive",
+      });
+      return;
+    }
+
     if (!selectedSize || !selectedColor) {
       toast({
         title: "Please select size and color",
@@ -50,10 +84,49 @@ const ProductDetail = () => {
       return;
     }
 
-    toast({
-      title: "Added to cart! 🛒",
-      description: `${product.name} - ${selectedSize}, ${selectedColor} (x${quantity})`,
-    });
+    try {
+      await addToCartMutation.mutateAsync({
+        productId: id!,
+        quantity: quantity
+      });
+      
+      toast({
+        title: "Added to cart! 🛒",
+        description: `${product.title} - ${selectedSize}, ${selectedColor} (x${quantity})`,
+      });
+    } catch (error) {
+      toast({
+        title: "Failed to add to cart",
+        description: "Please try again later",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleAddToWishlist = async () => {
+    if (!user) {
+      toast({
+        title: "Sign in required",
+        description: "Please sign in to add items to wishlist",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      await addToWishlistMutation.mutateAsync(id!);
+      
+      toast({
+        title: "Added to wishlist! ❤️",
+        description: `${product.title} has been added to your wishlist`,
+      });
+    } catch (error) {
+      toast({
+        title: "Failed to add to wishlist",
+        description: "Please try again later",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleBuyNow = () => {
@@ -67,7 +140,7 @@ const ProductDetail = () => {
 
     toast({
       title: "Proceeding to checkout...",
-      description: `${product.name} - ${selectedSize}, ${selectedColor}`,
+      description: `${product.title} - ${selectedSize}, ${selectedColor}`,
     });
   };
 
@@ -76,13 +149,13 @@ const ProductDetail = () => {
     
     // Amazon-style WhatsApp message with emojis and formatting
     const whatsappMessage = 
-`🔥 *${product.name}*
+`🔥 *${product.title}*
 
-${product.description}
+${product.description || product.short_description}
 
 💰 *Price:* ₹${(product.price / 100).toFixed(2)}
-📦 *Category:* ${product.category}
-⭐ *Rating:* ${product.rating || 'New'}/5
+📦 *Category:* ${product.categories?.name || 'Fashion'}
+⭐ *Rating:* New/5
 
 🛒 *Shop now on On3:*
 ${url}
@@ -94,14 +167,14 @@ ${url}
       if (navigator.share && navigator.canShare) {
         try {
           // Fetch the product image
-          const response = await fetch(product.image);
+          const response = await fetch(primaryImage);
           const blob = await response.blob();
-          const file = new File([blob], `${product.name.replace(/[^a-zA-Z0-9]/g, '_')}.jpg`, { 
+          const file = new File([blob], `${product.title.replace(/[^a-zA-Z0-9]/g, '_')}.jpg`, { 
             type: blob.type || 'image/jpeg' 
           });
 
           const shareData = {
-            title: product.name,
+            title: product.title,
             text: whatsappMessage,
             files: [file]
           };
@@ -135,7 +208,7 @@ ${url}
     }
   };
 
-  const gallery = product.gallery || [product.image, product.secondaryImage || product.image];
+  // Gallery is already defined above from product images
 
   return (
     <div className="min-h-screen">
@@ -166,7 +239,7 @@ ${url}
             <BreadcrumbItem>
               <BreadcrumbLink asChild>
                 <Link to="/shop" className="text-muted-foreground hover:text-foreground transition-smooth font-price">
-                  {product.category}
+                  {product.categories?.name || 'Products'}
                 </Link>
               </BreadcrumbLink>
             </BreadcrumbItem>
@@ -174,7 +247,7 @@ ${url}
               <ChevronRight className="h-4 w-4" />
             </BreadcrumbSeparator>
             <BreadcrumbItem>
-              <BreadcrumbPage className="text-foreground font-price">{product.name}</BreadcrumbPage>
+              <BreadcrumbPage className="text-foreground font-price">{product.title}</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
@@ -185,8 +258,8 @@ ${url}
             {/* Main Image */}
             <div className="relative aspect-square bg-card rounded-sm overflow-hidden group">
               <img
-                src={gallery[selectedImage]}
-                alt={product.name}
+                src={gallery[selectedImage] || primaryImage}
+                alt={product.title}
                 className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
               />
             </div>
@@ -201,7 +274,7 @@ ${url}
                     selectedImage === idx ? "border-primary" : "border-transparent hover:border-muted"
                   }`}
                 >
-                  <img src={img} alt={`${product.name} view ${idx + 1}`} className="w-full h-full object-cover" />
+                  <img src={img} alt={`${product.title} view ${idx + 1}`} className="w-full h-full object-cover" />
                 </button>
               ))}
             </div>
@@ -210,30 +283,32 @@ ${url}
           {/* Product Details */}
           <div className="space-y-6">
             <div>
-              <p className="text-sm text-muted-foreground mb-2 font-price uppercase tracking-wide">{product.category}</p>
-              <h1 className="text-4xl font-hero font-bold mb-4 text-foreground">{product.name}</h1>
+              <p className="text-sm text-muted-foreground mb-2 font-price uppercase tracking-wide">{product.categories?.name || 'Product'}</p>
+              <h1 className="text-4xl font-hero font-bold mb-4 text-foreground">{product.title}</h1>
               
-              {/* Rating */}
-              {product.rating && (
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="flex items-center gap-1 bg-primary/10 px-3 py-1 rounded-sm">
-                    <Star className="h-4 w-4 fill-primary text-primary" />
-                    <span className="font-price font-semibold text-foreground">{product.rating}</span>
-                  </div>
-                  <span className="text-sm text-muted-foreground font-price">
-                    ({product.reviews} reviews)
-                  </span>
+              {/* Rating - Static for now since we don't have reviews in DB yet */}
+              <div className="flex items-center gap-3 mb-4">
+                <div className="flex items-center gap-1 bg-primary/10 px-3 py-1 rounded-sm">
+                  <Star className="h-4 w-4 fill-primary text-primary" />
+                  <span className="font-price font-semibold text-foreground">4.8</span>
                 </div>
-              )}
+                <span className="text-sm text-muted-foreground font-price">
+                  (132 reviews)
+                </span>
+              </div>
 
               <div className="flex items-baseline gap-3 mb-3">
                 <p className="text-3xl font-price font-bold text-primary">
                   ₹{(product.price / 100).toFixed(2)}
                 </p>
-                <p className="text-lg font-price text-muted-foreground line-through">
-                  ₹{((product.price * 1.3) / 100).toFixed(2)}
-                </p>
-                <Badge variant="secondary" className="font-price">23% OFF</Badge>
+                {product.original_price && (
+                  <p className="text-lg font-price text-muted-foreground line-through">
+                    ₹{(product.original_price / 100).toFixed(2)}
+                  </p>
+                )}
+                {product.discount_percent && (
+                  <Badge variant="secondary" className="font-price">{product.discount_percent.toFixed(0)}% OFF</Badge>
+                )}
               </div>
               
               <p className="text-xs text-muted-foreground font-price mb-4">Inclusive of all taxes</p>
@@ -241,26 +316,28 @@ ${url}
               {/* Stock Status */}
               <div className="flex items-center gap-2 mb-4">
                 <Package2 className="h-5 w-5 text-green-500" />
-                <span className="text-sm font-price font-semibold text-green-500">In Stock</span>
+                <span className="text-sm font-price font-semibold text-green-500">
+                  {product.in_stock ? 'In Stock' : 'Out of Stock'}
+                </span>
               </div>
             </div>
 
             <p className="text-muted-foreground leading-relaxed font-price">
-              {product.fullDescription || product.description}
+              {product.description || product.short_description}
             </p>
 
             {/* Size Selection */}
             <div>
               <h3 className="font-heading font-semibold mb-3 text-foreground">Select Size:</h3>
               <div className="flex gap-2 flex-wrap">
-                {product.sizes.map((size) => (
+                {availableSizes.map((size) => (
                   <Button
-                    key={size}
+                    key={size as string}
                     variant={selectedSize === size ? "default" : "outline"}
-                    onClick={() => setSelectedSize(size)}
+                    onClick={() => setSelectedSize(size as string)}
                     className="min-w-[60px] transition-smooth"
                   >
-                    {size}
+                    {size as string}
                   </Button>
                 ))}
               </div>
@@ -270,14 +347,14 @@ ${url}
             <div>
               <h3 className="font-heading font-semibold mb-3 text-foreground">Select Color:</h3>
               <div className="flex gap-2 flex-wrap">
-                {product.colors.map((color) => (
+                {availableColors.map((color) => (
                   <Button
-                    key={color}
+                    key={color as string}
                     variant={selectedColor === color ? "default" : "outline"}
-                    onClick={() => setSelectedColor(color)}
+                    onClick={() => setSelectedColor(color as string)}
                     className="transition-smooth"
                   >
-                    {color}
+                    {color as string}
                   </Button>
                 ))}
               </div>
@@ -313,12 +390,19 @@ ${url}
                 size="lg"
                 className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90 font-heading transition-smooth"
                 onClick={handleAddToCart}
+                disabled={addToCartMutation.isPending}
               >
                 <ShoppingCart className="mr-2 h-5 w-5" />
-                Add to Cart
+                {addToCartMutation.isPending ? "Adding..." : "Add to Cart"}
               </Button>
-              <Button size="lg" variant="outline" className="transition-smooth">
-                <Heart className="h-5 w-5" />
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="transition-smooth"
+                onClick={handleAddToWishlist}
+                disabled={addToWishlistMutation.isPending}
+              >
+                <Heart className={`h-5 w-5 ${isInWishlist ? 'fill-red-500 text-red-500' : ''}`} />
               </Button>
             </div>
 
@@ -426,7 +510,7 @@ ${url}
             </TabsList>
             <TabsContent value="description" className="mt-6">
               <p className="text-muted-foreground leading-relaxed font-price">
-                {product.fullDescription || product.description}
+                {product.description || product.short_description}
               </p>
             </TabsContent>
             <TabsContent value="reviews" className="mt-6">
@@ -509,9 +593,9 @@ ${url}
             <TabsContent value="additional" className="mt-6">
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-3 text-muted-foreground font-price">
-                  <p><strong className="text-foreground">SKU:</strong> ON3-{product.id}</p>
-                  <p><strong className="text-foreground">Category:</strong> {product.category}</p>
-                  {product.collection && <p><strong className="text-foreground">Collection:</strong> {product.collection}</p>}
+                  <p><strong className="text-foreground">SKU:</strong> ON3-{product.id.slice(-8)}</p>
+                  <p><strong className="text-foreground">Category:</strong> {product.categories?.name || 'Fashion'}</p>
+                  {product.collections && <p><strong className="text-foreground">Collection:</strong> {product.collections.title}</p>}
                   <p><strong className="text-foreground">Weight:</strong> 220 GSM</p>
                   <p><strong className="text-foreground">Country of Origin:</strong> India</p>
                 </div>
@@ -554,19 +638,8 @@ ${url}
           </Tabs>
         </div>
 
-        {/* Related Products */}
-        {relatedProducts.length > 0 && (
-          <div>
-            <h2 className="text-3xl font-hero font-bold mb-8 text-foreground">
-              You May Also Like<span className="cursor-blink"></span>
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {relatedProducts.map((relatedProduct) => (
-                <ProductCard key={relatedProduct.id} product={relatedProduct} />
-              ))}
-            </div>
-          </div>
-        )}
+        {/* Related Products - TODO: Implement with database */}
+        {/* Will be implemented later with proper database queries */}
       </div>
     </div>
   );

@@ -1,0 +1,166 @@
+{
+    "users": {
+        "id": "uuid (PK)",
+        "email": "text",
+        "full_name": "text",
+	"gender":"text"
+        "avatar_url": "text",
+        "role": "text (user/admin)",
+        "created_at": "timestamp"
+    },
+    "products": {
+        "id": "uuid (PK)",
+        "title": "text",
+        "slug": "text (unique)",
+        "short_description": "text",
+        "description": "text",
+        "price": "numeric(10,2)",
+        "original_price": "numeric(10,2)",
+        "discount_percent": "numeric(5,2)",
+        "in_stock": "boolean",
+        "stock_quantity": "int",
+        "category_id": "uuid (FK \u2192 categories.id)",
+        "collection_id": "uuid (FK \u2192 collections.id)",
+        "brand": "text",
+        "featured": "boolean",
+        "created_at": "timestamp",
+        "updated_at": "timestamp"
+    },
+    "product_images": {
+        "id": "uuid (PK)",
+        "product_id": "uuid (FK \u2192 products.id)",
+        "image_url": "text",
+        "alt_text": "text",
+        "is_primary": "boolean"
+    },
+    "product_variants": {
+        "id": "uuid (PK)",
+        "product_id": "uuid (FK \u2192 products.id)",
+        "color": "text",
+        "size": "text",
+        "sku": "text",
+        "stock_quantity": "int",
+        "price": "numeric(10,2)"
+    },
+    "categories": {
+        "id": "uuid (PK)",
+        "name": "text",
+        "slug": "text",
+        "description": "text",
+        "created_at": "timestamp"
+    },
+    "collections": {
+        "id": "uuid (PK)",
+        "title": "text",
+        "slug": "text",
+        "description": "text",
+        "image_url": "text",
+        "theme": "text",
+        "created_at": "timestamp"
+    },
+    "reviews": {
+        "id": "uuid (PK)",
+        "product_id": "uuid (FK \u2192 products.id)",
+        "user_id": "uuid (FK \u2192 users.id)",
+        "rating": "int (1\u20135)",
+        "comment": "text",
+        "images": "text[]",
+        "created_at": "timestamp"
+    },
+    "wishlist": {
+        "id": "uuid (PK)",
+        "user_id": "uuid (FK \u2192 users.id)",
+        "product_id": "uuid (FK \u2192 products.id)",
+        "created_at": "timestamp"
+    },
+    "cart": {
+        "id": "uuid (PK)",
+        "user_id": "uuid (FK \u2192 users.id)",
+        "product_id": "uuid (FK \u2192 products.id)",
+        "variant_id": "uuid (FK \u2192 product_variants.id)",
+        "quantity": "int",
+        "created_at": "timestamp"
+    },
+    "orders": {
+        "id": "uuid (PK)",
+        "user_id": "uuid (FK \u2192 users.id)",
+        "address_id": "uuid (FK \u2192 addresses.id)",
+        "total_amount": "numeric(10,2)",
+        "status": "text",
+        "razorpay_payment_id": "text",
+        "razorpay_order_id": "text",
+        "created_at": "timestamp",
+        "updated_at": "timestamp"
+    },
+    "order_items": {
+        "id": "uuid (PK)",
+        "order_id": "uuid (FK \u2192 orders.id)",
+        "product_id": "uuid (FK \u2192 products.id)",
+        "variant_id": "uuid (FK \u2192 product_variants.id)",
+        "quantity": "int",
+        "price": "numeric(10,2)"
+    },
+    "addresses": {
+        "id": "uuid (PK)",
+        "user_id": "uuid (FK \u2192 users.id)",
+        "full_name": "text",
+        "phone_number": "text",
+        "address_line": "text",
+        "city": "text",
+        "state": "text",
+        "pincode": "text",
+        "country": "text",
+        "created_at": "timestamp"
+    },
+    "transactions": {
+        "id": "uuid (PK)",
+        "order_id": "uuid (FK \u2192 orders.id)",
+        "user_id": "uuid (FK \u2192 users.id)",
+        "razorpay_payment_id": "text",
+        "amount": "numeric(10,2)",
+        "currency": "text",
+        "status": "text",
+        "created_at": "timestamp"
+    },
+    "discount_codes": {
+        "id": "uuid (PK)",
+        "code": "text",
+        "discount_percent": "numeric(5,2)",
+        "valid_from": "timestamp",
+        "valid_to": "timestamp",
+        "is_active": "boolean",
+        "created_at": "timestamp"
+    },
+    "virtual_keypad_codes": {
+        "id": "uuid (PK)",
+        "symbol_code": "text",
+        "discount_code_id": "uuid (FK \u2192 discount_codes.id)",
+        "used_by": "uuid[]",
+        "is_active": "boolean",
+        "created_at": "timestamp"
+    },
+    "blogs": {
+        "id": "uuid (PK)",
+        "title": "text",
+        "slug": "text",
+        "content": "text",
+        "banner_image": "text",
+        "author_id": "uuid (FK \u2192 users.id)",
+        "created_at": "timestamp"
+    },
+    "contact_messages": {
+        "id": "uuid (PK)",
+        "name": "text",
+        "email": "text",
+        "subject": "text",
+        "message": "text",
+        "created_at": "timestamp",
+        "status": "text"
+    },
+    "admin_settings": {
+        "id": "uuid (PK)",
+        "key": "text",
+        "value": "jsonb",
+        "updated_at": "timestamp"
+    }
+}

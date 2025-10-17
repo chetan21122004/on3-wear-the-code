@@ -1,11 +1,21 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ShoppingCart, Heart, Menu, X, Search } from "lucide-react";
+import { ShoppingCart, Heart, Menu, X, Search, User, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { motion } from "framer-motion";
+import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/hooks/use-toast";
+import { useCartItemCount } from "@/hooks/useCart";
+import { useWishlistItemCount } from "@/hooks/useWishlist";
 
 export const Navbar = () => {
+  const { user, userProfile, signOut, loading } = useAuth();
+  const { toast } = useToast();
+  const { data: cartCount } = useCartItemCount();
+  const { data: wishlistCount } = useWishlistItemCount();
   const [isOpen, setIsOpen] = useState(false);
   const [currentLogo, setCurrentLogo] = useState(1); // Start with main logo
   const [hasChanged, setHasChanged] = useState(false);
@@ -22,6 +32,30 @@ export const Navbar = () => {
 
   const handleLogoLeave = () => {
     setHasChanged(false);
+  };
+
+  const handleSignOut = async () => {
+    try {
+      const { error } = await signOut();
+      if (error) {
+        toast({
+          title: "Sign Out Failed",
+          description: error.message,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Signed Out",
+          description: "You've been successfully signed out.",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Sign Out Failed",
+        description: "An unexpected error occurred.",
+        variant: "destructive",
+      });
+    }
   };
 
   const navLinks = [
@@ -76,19 +110,93 @@ export const Navbar = () => {
             ))}
           </div>
 
-          {/* Icons */}
+          {/* Icons and Auth */}
           <div className="flex items-center space-x-4">
             <Button variant="ghost" size="icon" className="text-[#DDCEB6] hover:text-[#81715D]">
               <Search className="h-5 w-5" />
             </Button>
             <Link to="/wishlist">
-              <Button variant="ghost" size="icon" className="text-[#DDCEB6] hover:text-[#81715D]">
+              <Button variant="ghost" size="icon" className="text-[#DDCEB6] hover:text-[#81715D] relative">
                 <Heart className="h-5 w-5" />
+                {wishlistCount && wishlistCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-[#81715D] text-[#191919] text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
+                    {wishlistCount > 99 ? '99+' : wishlistCount}
+                  </span>
+                )}
               </Button>
             </Link>
-            <Button variant="ghost" size="icon" className="text-[#DDCEB6] hover:text-[#81715D]">
-              <ShoppingCart className="h-5 w-5" />
-            </Button>
+            <Link to="/cart">
+              <Button variant="ghost" size="icon" className="text-[#DDCEB6] hover:text-[#81715D] relative">
+                <ShoppingCart className="h-5 w-5" />
+                {cartCount && cartCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-[#81715D] text-[#191919] text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
+                    {cartCount > 99 ? '99+' : cartCount}
+                  </span>
+                )}
+              </Button>
+            </Link>
+
+            {/* Authentication */}
+            {loading ? (
+              <div className="w-8 h-8 animate-spin rounded-full border-b-2 border-[#81715D]"></div>
+            ) : user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                    <Avatar className="h-8 w-8">
+                      <AvatarImage src={userProfile?.avatar_url || user.user_metadata?.avatar_url} alt={userProfile?.full_name || user.email} />
+                      <AvatarFallback className="bg-[#81715D] text-[#191919]">
+                        {(userProfile?.full_name || user.email || 'U').charAt(0).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56 bg-[#191919] border-[#81715D]/30" align="end" forceMount>
+                  <div className="flex items-center justify-start gap-2 p-2">
+                    <div className="flex flex-col space-y-1 leading-none">
+                      <p className="font-medium text-[#DDCEB6]">
+                        {userProfile?.full_name || user.user_metadata?.full_name || 'User'}
+                      </p>
+                      <p className="w-[200px] truncate text-sm text-[#DDCEB6]/60">
+                        {user.email}
+                      </p>
+                    </div>
+                  </div>
+                  <DropdownMenuSeparator className="bg-[#81715D]/20" />
+                  <DropdownMenuItem className="text-[#DDCEB6] focus:bg-[#81715D]/10 focus:text-[#DDCEB6]" asChild>
+                    <Link to="/profile">
+                      <User className="mr-2 h-4 w-4" />
+                      <span>Profile</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem className="text-[#DDCEB6] focus:bg-[#81715D]/10 focus:text-[#DDCEB6]">
+                    <ShoppingCart className="mr-2 h-4 w-4" />
+                    <span>Orders</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator className="bg-[#81715D]/20" />
+                  <DropdownMenuItem 
+                    className="text-[#DDCEB6] focus:bg-[#81715D]/10 focus:text-[#DDCEB6]"
+                    onClick={handleSignOut}
+                  >
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>Sign out</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <div className="hidden md:flex items-center space-x-2">
+                <Link to="/login">
+                  <Button variant="ghost" className="text-[#DDCEB6] hover:text-[#81715D] font-heading">
+                    Sign In
+                  </Button>
+                </Link>
+                <Link to="/signup">
+                  <Button className="bg-[#81715D] hover:bg-[#DDCEB6] text-[#191919] font-heading">
+                    Sign Up
+                  </Button>
+                </Link>
+              </div>
+            )}
 
             {/* Mobile Menu */}
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -109,6 +217,34 @@ export const Navbar = () => {
                       {link.name}
                     </Link>
                   ))}
+                  
+                  {/* Mobile Auth Links */}
+                  {!user && (
+                    <div className="flex flex-col space-y-4 pt-6 border-t border-border">
+                      <Link to="/login" onClick={() => setIsOpen(false)}>
+                        <Button variant="outline" className="w-full font-heading">
+                          Sign In
+                        </Button>
+                      </Link>
+                      <Link to="/signup" onClick={() => setIsOpen(false)}>
+                        <Button className="w-full font-heading">
+                          Sign Up
+                        </Button>
+                      </Link>
+                    </div>
+                  )}
+                  
+                  {user && (
+                    <div className="flex flex-col space-y-4 pt-6 border-t border-border">
+                      <div className="text-sm text-muted-foreground">
+                        Signed in as {userProfile?.full_name || user.email}
+                      </div>
+                      <Button variant="outline" onClick={handleSignOut} className="w-full font-heading">
+                        <LogOut className="mr-2 h-4 w-4" />
+                        Sign Out
+                      </Button>
+                    </div>
+                  )}
                 </div>
               </SheetContent>
             </Sheet>

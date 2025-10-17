@@ -25,7 +25,7 @@ export interface Product {
 
 export const products: Product[] = [
   {
-    id: "1",
+    id: "00000000-0000-0000-0000-000000000001",
     name: "Circuit Tee",
     price: 2499,
     category: "T-Shirts",
@@ -51,7 +51,7 @@ export const products: Product[] = [
     washCare: "Machine wash cold, tumble dry low, do not bleach"
   },
   {
-    id: "2",
+    id: "00000000-0000-0000-0000-000000000002",
     name: "Code Hoodie",
     price: 4999,
     category: "Hoodies",
@@ -64,7 +64,7 @@ export const products: Product[] = [
     collection: "Tech Drop",
   },
   {
-    id: "3",
+    id: "00000000-0000-0000-0000-000000000003",
     name: "Tech Cargo",
     price: 5499,
     category: "Lowers",
@@ -77,7 +77,7 @@ export const products: Product[] = [
     collection: "Classic",
   },
   {
-    id: "4",
+    id: "00000000-0000-0000-0000-000000000004",
     name: "Binary Tee",
     price: 2299,
     category: "T-Shirts",
@@ -90,7 +90,7 @@ export const products: Product[] = [
     collection: "Classic",
   },
   {
-    id: "5",
+    id: "00000000-0000-0000-0000-000000000005",
     name: "Terminal Hoodie",
     price: 4799,
     category: "Hoodies",
@@ -103,7 +103,7 @@ export const products: Product[] = [
     collection: "Limited Edition",
   },
   {
-    id: "6",
+    id: "00000000-0000-0000-0000-000000000006",
     name: "Urban Cargo",
     price: 5299,
     category: "Lowers",
