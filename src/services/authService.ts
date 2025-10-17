@@ -60,7 +60,10 @@ export const authService = {
         queryParams: {
           access_type: 'offline',
           prompt: 'consent',
-        }
+        },
+        // Use PKCE flow instead of implicit flow for better security
+        skipBrowserRedirect: false,
+        scopes: 'email profile'
       }
     })
 
