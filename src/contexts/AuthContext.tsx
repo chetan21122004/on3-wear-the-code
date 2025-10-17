@@ -13,6 +13,7 @@ interface AuthContextType {
   signIn: (data: SignInData) => Promise<{ error: AuthError | null }>
   signInWithGoogle: () => Promise<{ error: AuthError | null }>
   signOut: () => Promise<{ error: AuthError | null }>
+  forceSignOut: () => void
   resetPassword: (email: string) => Promise<{ error: AuthError | null }>
   updateProfile: (updates: Partial<UserProfile>) => Promise<{ error: any }>
   refreshProfile: () => Promise<void>
@@ -40,9 +41,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const fetchUserProfile = async (userId: string) => {
     try {
-      // Add timeout to prevent hanging
+      // Shorter timeout for production to prevent blocking
       const timeoutPromise = new Promise((_, reject) => 
-        setTimeout(() => reject(new Error('Profile fetch timeout')), 10000)
+        setTimeout(() => reject(new Error('Profile fetch timeout')), 5000) // 5 second timeout
       )
       
       const fetchPromise = supabase
@@ -54,28 +55,28 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const { data, error } = await Promise.race([fetchPromise, timeoutPromise]) as any
 
       if (error) {
-        console.error('Error fetching user profile:', error)
-        // Return a basic profile if fetch fails to prevent infinite loading
+        console.warn('Profile fetch failed, using fallback:', error.message)
+        // Return a basic profile with user metadata if available
         return {
           id: userId,
-          email: null,
-          full_name: null,
-          gender: null,
-          created_at: new Date().toISOString(),
+          email: user?.email || null,
+          full_name: user?.user_metadata?.full_name || null,
+          gender: user?.user_metadata?.gender || null,
+          created_at: user?.created_at || new Date().toISOString(),
           updated_at: new Date().toISOString()
         }
       }
 
       return data
     } catch (error) {
-      console.error('Error fetching user profile:', error)
-      // Return a basic profile if fetch fails to prevent infinite loading
+      console.warn('Profile fetch error, using fallback:', error instanceof Error ? error.message : 'Unknown error')
+      // Return a basic profile with user metadata if available
       return {
         id: userId,
-        email: null,
-        full_name: null,
-        gender: null,
-        created_at: new Date().toISOString(),
+        email: user?.email || null,
+        full_name: user?.user_metadata?.full_name || null,
+        gender: user?.user_metadata?.gender || null,
+        created_at: user?.created_at || new Date().toISOString(),
         updated_at: new Date().toISOString()
       }
     }
@@ -192,8 +193,48 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
 
   const signOut = async () => {
-    const { error } = await authService.signOut()
-    return { error }
+    try {
+      // Clear local state immediately to prevent UI blocking
+      setUser(null)
+      setUserProfile(null)
+      setSession(null)
+      
+      // Call the auth service to sign out
+      const { error } = await authService.signOut()
+      
+      if (error) {
+        console.error('Sign out error:', error)
+        // Even if there's an error, we've cleared local state
+        // so the user appears signed out in the UI
+      }
+      
+      return { error }
+    } catch (error) {
+      console.error('Unexpected error during sign out:', error)
+      // Still clear local state even if there's an unexpected error
+      setUser(null)
+      setUserProfile(null)
+      setSession(null)
+      return { error }
+    }
+  }
+
+  const forceSignOut = () => {
+    // Force clear all auth state immediately without API calls
+    // Use this when regular signOut fails due to network/timeout issues
+    console.log('Force signing out user')
+    setUser(null)
+    setUserProfile(null)
+    setSession(null)
+    setLoading(false)
+    
+    // Clear localStorage/sessionStorage if needed
+    try {
+      localStorage.removeItem('supabase.auth.token')
+      sessionStorage.clear()
+    } catch (e) {
+      console.warn('Could not clear storage:', e)
+    }
   }
 
   const resetPassword = async (email: string) => {
@@ -227,6 +268,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     signIn,
     signInWithGoogle,
     signOut,
+    forceSignOut,
     resetPassword,
     updateProfile,
     refreshProfile,

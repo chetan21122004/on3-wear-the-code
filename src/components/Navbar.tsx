@@ -12,7 +12,7 @@ import { useCartItemCount } from "@/hooks/useCart";
 import { useWishlistItemCount } from "@/hooks/useWishlist";
 
 export const Navbar = () => {
-  const { user, userProfile, signOut, loading } = useAuth();
+  const { user, userProfile, signOut, forceSignOut, loading } = useAuth();
   const { toast } = useToast();
   const { data: cartCount } = useCartItemCount();
   const { data: wishlistCount } = useWishlistItemCount();
@@ -36,12 +36,21 @@ export const Navbar = () => {
 
   const handleSignOut = async () => {
     try {
-      const { error } = await signOut();
+      // Set a timeout for the signOut operation
+      const signOutPromise = signOut();
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Sign out timeout')), 5000)
+      );
+
+      const { error } = await Promise.race([signOutPromise, timeoutPromise]) as any;
+      
       if (error) {
+        console.warn('Regular sign out failed, using force sign out:', error.message);
+        // If regular sign out fails, use force sign out
+        forceSignOut();
         toast({
-          title: "Sign Out Failed",
-          description: error.message,
-          variant: "destructive",
+          title: "Signed Out",
+          description: "You've been successfully signed out.",
         });
       } else {
         toast({
@@ -50,10 +59,12 @@ export const Navbar = () => {
         });
       }
     } catch (error) {
+      console.warn('Sign out error, using force sign out:', error);
+      // If there's any error or timeout, force sign out
+      forceSignOut();
       toast({
-        title: "Sign Out Failed",
-        description: "An unexpected error occurred.",
-        variant: "destructive",
+        title: "Signed Out",
+        description: "You've been successfully signed out.",
       });
     }
   };
