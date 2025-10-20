@@ -76,114 +76,55 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
-      <section className="relative min-h-[92vh] flex items-center justify-center overflow-hidden">
-        {/* Background with Overlay */}
-        <div className="absolute inset-0 z-0">
+      <section className="relative h-screen overflow-hidden">
+        {/* Full Background Image */}
+        <div className="absolute inset-0">
           <img
             src={heroBanner}
-            alt="Premium Streetwear Collection"
+            alt="ON3 Streetwear Collection"
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-background/90 via-background/70 to-background"></div>
-          <div className="absolute inset-0 bg-gradient-to-r from-background/50 via-transparent to-background/50"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent"></div>
         </div>
 
-        {/* Hero Content */}
-        <div className="relative z-10 container mx-auto px-4 py-20">
-          <div className="max-w-4xl mx-auto text-center">
-            {/* Badge */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="inline-block mb-6"
-            >
-              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary font-price text-sm tracking-wide">
-                <Zap className="h-4 w-4" />
-                NEW SEASON COLLECTION
-              </span>
-            </motion.div>
-
-            {/* Main Heading */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-            >
-              <h1 className="text-5xl md:text-7xl lg:text-8xl font-hero font-bold text-foreground mb-6 leading-tight">
-                <span className="glitch block mb-2">WEAR THE</span>
-                <span className="text-primary block">CODE</span>
-              </h1>
-            </motion.div>
-            
-            {/* Subheading */}
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-              className="text-xl md:text-2xl lg:text-3xl text-muted-foreground mb-4 font-price max-w-2xl mx-auto"
-            >
-              Minimal streetwear engineered for those who code their own path
-            </motion.p>
-
-            {/* Typing Effect */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1, delay: 0.6 }}
-              className="mb-10 font-mono text-primary text-base md:text-lg"
-            >
-              <code className="bg-card/50 px-4 py-2 rounded border border-border">
-                &lt;{displayText}<span className="cursor-blink"></span>&gt;
-              </code>
-            </motion.div>
-
-            {/* CTA Buttons */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.8 }}
-              className="flex flex-col sm:flex-row gap-4 justify-center items-center"
-            >
-              <Link to="/shop">
-                <Button
-                  size="lg"
-                  className="bg-primary text-primary-foreground hover:bg-primary/90 font-heading font-semibold px-10 py-7 text-base md:text-lg group"
-                >
-                  Explore Collection
-                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                </Button>
-              </Link>
-              <Button
-                size="lg"
-                variant="outline"
-                className="border-2 border-primary text-foreground hover:bg-primary/10 font-heading font-semibold px-10 py-7 text-base md:text-lg"
+        {/* Content - Bottom Left Aligned */}
+        <div className="relative h-full flex items-end">
+          <div className="container mx-auto px-6 md:px-12 pb-20 md:pb-32">
+            <div className="max-w-3xl">
+              <motion.h1
+                initial={{ opacity: 0, x: -30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8 }}
+                className="text-6xl md:text-8xl lg:text-9xl font-hero font-bold text-foreground mb-6 leading-none"
               >
-                View Lookbook
-                <Zap className="ml-2 h-5 w-5" />
-              </Button>
-            </motion.div>
+                ON3
+              </motion.h1>
+              
+              <motion.p
+                initial={{ opacity: 0, x: -30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="text-xl md:text-2xl text-foreground/90 mb-8 font-price tracking-wide"
+              >
+                Streetwear. Redefined.
+              </motion.p>
 
-            {/* Trust Indicators */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1, delay: 1 }}
-              className="mt-16 flex flex-wrap justify-center items-center gap-8 text-sm text-muted-foreground font-price"
-            >
-              <div className="flex items-center gap-2">
-                <div className="h-1.5 w-1.5 rounded-full bg-primary"></div>
-                Free Shipping Above ₹2,999
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="h-1.5 w-1.5 rounded-full bg-primary"></div>
-                7-Day Easy Returns
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="h-1.5 w-1.5 rounded-full bg-primary"></div>
-                Premium Quality Guaranteed
-              </div>
-            </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.4 }}
+                className="flex gap-4"
+              >
+                <Link to="/shop">
+                  <Button
+                    size="lg"
+                    className="bg-foreground text-background hover:bg-foreground/90 font-heading px-8 h-14 text-base"
+                  >
+                    Shop Now
+                  </Button>
+                </Link>
+              </motion.div>
+            </div>
           </div>
         </div>
       </section>
