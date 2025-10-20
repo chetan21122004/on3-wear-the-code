@@ -1,3 +1,7 @@
+// Order service hooks - temporarily disabled until orderService is implemented
+// Uncomment when orderService.ts is created
+
+/*
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { orderService, CreateOrderData } from '@/services/orderService'
 import { useAuth } from '@/contexts/AuthContext'
@@ -118,3 +122,6 @@ export const useCancelOrder = () => {
     },
   })
 }
+*/
+
+export {}

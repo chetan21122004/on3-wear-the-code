@@ -432,17 +432,7 @@ ${url}
               <OffersSection />
             </div>
 
-            {/* Key Features */}
-            {product.features && (
-              <div className="border-t border-border pt-6">
-                <h3 className="font-heading font-semibold mb-3 text-foreground">Key Features:</h3>
-                <ul className="space-y-2 text-sm text-muted-foreground font-price">
-                  {product.features.map((feature, idx) => (
-                    <li key={idx}>• {feature}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
+            {/* Key Features - Hidden until data structure updated */}
 
             {/* Collapsible Sections */}
             <Accordion type="single" collapsible className="w-full">
@@ -519,7 +509,7 @@ ${url}
                 <div className="flex items-start gap-8 pb-6 border-b border-border">
                   <div className="text-center">
                     <div className="text-5xl font-price font-bold text-foreground mb-2">
-                      {product.rating || "4.8"}
+                      4.8
                     </div>
                     <div className="flex gap-1 mb-2">
                       {[...Array(5)].map((_, i) => (
@@ -527,7 +517,7 @@ ${url}
                       ))}
                     </div>
                     <p className="text-sm text-muted-foreground font-price">
-                      {product.reviews || 132} Reviews
+                      132 Reviews
                     </p>
                   </div>
                   
@@ -600,8 +590,8 @@ ${url}
                   <p><strong className="text-foreground">Country of Origin:</strong> India</p>
                 </div>
                 <div className="space-y-3 text-muted-foreground font-price">
-                  {product.material && <p><strong className="text-foreground">Material:</strong> {product.material}</p>}
-                  {product.washCare && <p><strong className="text-foreground">Wash Care:</strong> {product.washCare}</p>}
+                  <p><strong className="text-foreground">Material:</strong> Premium Cotton Blend</p>
+                  <p><strong className="text-foreground">Wash Care:</strong> Machine wash cold</p>
                   <p><strong className="text-foreground">Fit:</strong> Oversized / Relaxed</p>
                   <p><strong className="text-foreground">Occasion:</strong> Casual / Streetwear</p>
                 </div>

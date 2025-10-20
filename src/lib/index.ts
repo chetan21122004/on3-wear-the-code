@@ -7,15 +7,11 @@ export type * from './database.types'
 export { productService } from '@/services/productService'
 export { categoryService } from '@/services/categoryService'
 export { cartService } from '@/services/cartService'
-export { orderService } from '@/services/orderService'
 export { wishlistService } from '@/services/wishlistService'
-export { addressService } from '@/services/addressService'
-export { reviewService } from '@/services/reviewService'
 
 // Export hooks
 export * from '@/hooks/useProducts'
 export * from '@/hooks/useCart'
-export * from '@/hooks/useOrders'
 export * from '@/hooks/useWishlist'
 
 // Export contexts
