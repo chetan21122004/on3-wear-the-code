@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Truck, Shield, RotateCcw, Instagram, Sparkles, Zap, TrendingUp, Code2, Lock, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -8,11 +8,20 @@ import { Input } from "@/components/ui/input";
 import { ProductCard } from "@/components/ProductCard";
 import { products } from "@/data/products";
 import heroBanner from "@/assets/hero-banner.jpg";
+import aboutBanner from "@/assets/about-banner.jpg";
 import insta1 from "@/assets/insta-1.jpg";
 import insta2 from "@/assets/insta-2.jpg";
 import insta3 from "@/assets/insta-3.jpg";
 import insta4 from "@/assets/insta-4.jpg";
 import insta5 from "@/assets/insta-5.jpg";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
 
 const Home = () => {
   const [displayText, setDisplayText] = useState("");
@@ -23,6 +32,37 @@ const Home = () => {
     seconds: 0
   });
   const [email, setEmail] = useState("");
+
+  const autoplayPlugin = useRef(
+    Autoplay({ delay: 5000, stopOnInteraction: true })
+  );
+
+  const heroSlides = [
+    {
+      image: heroBanner,
+      title: "NEW SEASON",
+      subtitle: "Fall/Winter 2025",
+      description: "Explore the latest streetwear collection",
+      cta: "Shop Collection",
+      link: "/shop"
+    },
+    {
+      image: aboutBanner,
+      title: "EXCLUSIVE DROP",
+      subtitle: "Limited Edition",
+      description: "Premium pieces for the bold",
+      cta: "View Collection",
+      link: "/collections/limited-edition"
+    },
+    {
+      image: insta1,
+      title: "TECH WEAR",
+      subtitle: "Code & Style",
+      description: "Minimal streetwear meets tech culture",
+      cta: "Explore Tech Drop",
+      link: "/collections/tech-drop"
+    }
+  ];
 
   const featuredProducts = products.filter((p) => p.featured);
   const newArrivals = products.slice(0, 4);
@@ -77,56 +117,99 @@ const Home = () => {
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
       <section className="relative h-screen overflow-hidden">
-        {/* Full Background Image */}
-        <div className="absolute inset-0">
-          <img
-            src={heroBanner}
-            alt="ON3 Streetwear Collection"
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent"></div>
-        </div>
+        <Carousel
+          plugins={[autoplayPlugin.current]}
+          className="w-full h-full"
+          onMouseEnter={() => autoplayPlugin.current.stop()}
+          onMouseLeave={() => autoplayPlugin.current.play()}
+        >
+          <CarouselContent className="h-screen">
+            {heroSlides.map((slide, index) => (
+              <CarouselItem key={index} className="relative h-screen">
+                {/* Background Image */}
+                <div className="absolute inset-0">
+                  <img
+                    src={slide.image}
+                    alt={slide.title}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-background/30"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-background/80 via-background/40 to-transparent"></div>
+                </div>
 
-        {/* Content - Bottom Left Aligned */}
-        <div className="relative h-full flex items-end">
-          <div className="container mx-auto px-6 md:px-12 pb-20 md:pb-32">
-            <div className="max-w-3xl">
-              <motion.h1
-                initial={{ opacity: 0, x: -30 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8 }}
-                className="text-6xl md:text-8xl lg:text-9xl font-hero font-bold text-foreground mb-6 leading-none"
-              >
-                ON3
-              </motion.h1>
-              
-              <motion.p
-                initial={{ opacity: 0, x: -30 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-                className="text-xl md:text-2xl text-foreground/90 mb-8 font-price tracking-wide"
-              >
-                Streetwear. Redefined.
-              </motion.p>
+                {/* Content */}
+                <div className="relative h-full flex items-center">
+                  <div className="container mx-auto px-6 md:px-12">
+                    <div className="max-w-2xl">
+                      <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6, delay: 0.2 }}
+                        className="mb-4"
+                      >
+                        <span className="text-primary font-price text-sm md:text-base tracking-widest uppercase">
+                          {slide.subtitle}
+                        </span>
+                      </motion.div>
 
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.4 }}
-                className="flex gap-4"
-              >
-                <Link to="/shop">
-                  <Button
-                    size="lg"
-                    className="bg-foreground text-background hover:bg-foreground/90 font-heading px-8 h-14 text-base"
-                  >
-                    Shop Now
-                  </Button>
-                </Link>
-              </motion.div>
-            </div>
+                      <motion.h1
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, delay: 0.3 }}
+                        className="text-5xl md:text-7xl lg:text-8xl font-hero font-bold text-foreground mb-6 leading-tight"
+                      >
+                        {slide.title}
+                      </motion.h1>
+                      
+                      <motion.p
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, delay: 0.4 }}
+                        className="text-lg md:text-xl text-foreground/80 mb-8 font-price"
+                      >
+                        {slide.description}
+                      </motion.p>
+
+                      <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6, delay: 0.5 }}
+                      >
+                        <Link to={slide.link}>
+                          <Button
+                            size="lg"
+                            className="bg-foreground text-background hover:bg-foreground/90 font-heading px-8 h-14 text-base group"
+                          >
+                            {slide.cta}
+                            <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                          </Button>
+                        </Link>
+                      </motion.div>
+                    </div>
+                  </div>
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          
+          {/* Custom Navigation */}
+          <div className="absolute bottom-8 right-8 flex gap-2 z-20">
+            <CarouselPrevious className="static translate-y-0 bg-foreground/10 backdrop-blur-sm border-foreground/20 hover:bg-foreground/20 text-foreground" />
+            <CarouselNext className="static translate-y-0 bg-foreground/10 backdrop-blur-sm border-foreground/20 hover:bg-foreground/20 text-foreground" />
           </div>
-        </div>
+
+          {/* Slide Indicators */}
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2 z-20">
+            {heroSlides.map((_, index) => (
+              <div
+                key={index}
+                className="h-1 w-8 bg-foreground/30 rounded-full overflow-hidden"
+              >
+                <div className="h-full bg-foreground w-0 animate-progress"></div>
+              </div>
+            ))}
+          </div>
+        </Carousel>
       </section>
 
       {/* Features */}
