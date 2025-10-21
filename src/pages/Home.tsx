@@ -156,7 +156,7 @@ const Home = () => {
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 0.3 }}
-                        className="text-5xl md:text-7xl lg:text-8xl font-hero font-bold text-foreground mb-6 leading-tight"
+                        className="text-2xl md:text-4xl lg:text-5xl font-hero font-bold text-foreground mb-6 leading-tight"
                       >
                         {slide.title}
                       </motion.h1>
