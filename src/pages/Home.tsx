@@ -116,100 +116,71 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
-      <section className="relative h-screen overflow-hidden">
-        <Carousel
-          plugins={[autoplayPlugin.current]}
-          className="w-full h-full"
-          onMouseEnter={() => autoplayPlugin.current.stop()}
-          onMouseLeave={() => autoplayPlugin.current.play()}
-        >
-          <CarouselContent className="h-screen">
-            {heroSlides.map((slide, index) => (
-              <CarouselItem key={index} className="relative h-screen">
-                {/* Background Image */}
-                <div className="absolute inset-0">
-                  <img
-                    src={slide.image}
-                    alt={slide.title}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-background/30"></div>
-                  <div className="absolute inset-0 bg-gradient-to-r from-background/80 via-background/40 to-transparent"></div>
-                </div>
+      <section className="relative h-[90vh] flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <img
+            src={heroBanner}
+            alt="Hero Banner"
+            className="w-full h-full object-cover opacity-60"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#191919]/70 via-[#191919]/50 to-background"></div>
+        </div>
 
-                {/* Content */}
-                <div className="relative h-full flex items-center">
-                  <div className="container mx-auto px-6 md:px-12">
-                    <div className="max-w-2xl">
-                      <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: 0.2 }}
-                        className="mb-4"
-                      >
-                        <span className="text-primary font-price text-sm md:text-base tracking-widest uppercase">
-                          {slide.subtitle}
-                        </span>
-                      </motion.div>
-
-                      <motion.h1
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8, delay: 0.3 }}
-                        className="text-2xl md:text-4xl lg:text-5xl font-hero font-bold text-foreground mb-6 leading-tight"
-                      >
-                        {slide.title}
-                      </motion.h1>
-                      
-                      <motion.p
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8, delay: 0.4 }}
-                        className="text-lg md:text-xl text-foreground/80 mb-8 font-price"
-                      >
-                        {slide.description}
-                      </motion.p>
-
-                      <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: 0.5 }}
-                      >
-                        <Link to={slide.link}>
-                          <Button
-                            size="lg"
-                            className="bg-foreground text-background hover:bg-foreground/90 font-heading px-8 h-14 text-base group"
-                          >
-                            {slide.cta}
-                            <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                          </Button>
-                        </Link>
-                      </motion.div>
-                    </div>
-                  </div>
-                </div>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
+        <div className="relative z-10 text-center px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1 }}
+          >
           
-          {/* Custom Navigation */}
-          <div className="absolute bottom-8 right-8 flex gap-2 z-20">
-            <CarouselPrevious className="static translate-y-0 bg-foreground/10 backdrop-blur-sm border-foreground/20 hover:bg-foreground/20 text-foreground" />
-            <CarouselNext className="static translate-y-0 bg-foreground/10 backdrop-blur-sm border-foreground/20 hover:bg-foreground/20 text-foreground" />
-          </div>
+            <h2 className="text-4xl md:text-6xl font-[quakiz] font-bold text-[#81715D] mb-6">
+              <span className="glitch">Wear The Code</span>
+            </h2>
+          </motion.div>
+          
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="text-xl md:text-2xl text-[#DDCEB6]/80 mb-4 font-price"
+          >
+            Minimal streetwear crafted for the bold.
+          </motion.p>
 
-          {/* Slide Indicators */}
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2 z-20">
-            {heroSlides.map((_, index) => (
-              <div
-                key={index}
-                className="h-1 w-8 bg-foreground/30 rounded-full overflow-hidden"
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 0.5 }}
+            className="mb-8 font-mono text-[#81715D] text-lg"
+          >
+            <code>&lt;{displayText}<span className="cursor-blink"></span>&gt;</code>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.7 }}
+            className="flex flex-col sm:flex-row gap-4 justify-center"
+          >
+            <Link to="/shop">
+              <Button
+                size="lg"
+                className="bg-[#81715D] text-[#191919] hover:bg-[#DDCEB6] transition-all duration-300 font-heading font-semibold px-8 py-6 text-lg"
               >
-                <div className="h-full bg-foreground w-0 animate-progress"></div>
-              </div>
-            ))}
-          </div>
-        </Carousel>
+                Shop Collection
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </Link>
+            <Button
+              size="lg"
+              variant="outline"
+              className="border-[#81715D] text-[#DDCEB6] hover:bg-[#81715D]/10 font-heading font-semibold px-8 py-6 text-lg"
+            >
+              Next Drop
+              <Zap className="ml-2 h-5 w-5" />
+            </Button>
+          </motion.div>
+        </div>
       </section>
 
       {/* Features */}
