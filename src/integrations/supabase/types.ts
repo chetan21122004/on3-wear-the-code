@@ -340,6 +340,7 @@ export type Database = {
           items: Json | null
           razorpay_order_id: string | null
           razorpay_payment_id: string | null
+          razorpay_signature: string | null
           shipping_address: Json | null
           shipping_cost: number | null
           status: string
@@ -356,6 +357,7 @@ export type Database = {
           items?: Json | null
           razorpay_order_id?: string | null
           razorpay_payment_id?: string | null
+          razorpay_signature?: string | null
           shipping_address?: Json | null
           shipping_cost?: number | null
           status?: string
@@ -372,6 +374,7 @@ export type Database = {
           items?: Json | null
           razorpay_order_id?: string | null
           razorpay_payment_id?: string | null
+          razorpay_signature?: string | null
           shipping_address?: Json | null
           shipping_cost?: number | null
           status?: string
