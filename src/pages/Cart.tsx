@@ -8,6 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCartItems, useUpdateCartItemQuantity, useRemoveFromCart, useClearCart, useMoveToWishlist } from "@/hooks/useCart";
 import { useToast } from "@/hooks/use-toast";
+import { paymentService } from "@/services/paymentService";
 
 const Cart = () => {
   const { user } = useAuth();
@@ -21,6 +22,7 @@ const Cart = () => {
   const moveToWishlistMutation = useMoveToWishlist();
 
   const [isProcessing, setIsProcessing] = useState<string | null>(null);
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
 
   // Redirect to login if not authenticated
   if (!user) {
@@ -119,6 +121,76 @@ const Cart = () => {
         description: "Failed to clear cart",
         variant: "destructive",
       });
+    }
+  };
+
+  const handleCheckout = async () => {
+    if (!user || !cartItems || cartItems.length === 0) return;
+
+    setIsCheckingOut(true);
+
+    try {
+      // Create Razorpay order
+      const orderData = await paymentService.createOrder(total, user.id);
+
+      // Initialize Razorpay checkout
+      paymentService.initiateCheckout({
+        orderId: orderData.orderId,
+        amount: orderData.amount,
+        userEmail: user.email || '',
+        userName: user.user_metadata?.full_name || 'Customer',
+        onSuccess: async (response: any) => {
+          try {
+            // Verify payment
+            const verificationResult = await paymentService.verifyPayment(
+              {
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+              },
+              user.id
+            );
+
+            if (verificationResult.success) {
+              toast({
+                title: "Payment Successful!",
+                description: "Your order has been placed successfully.",
+              });
+              
+              // Navigate to order confirmation or profile
+              navigate('/profile');
+            } else {
+              throw new Error('Payment verification failed');
+            }
+          } catch (error) {
+            console.error('Payment verification error:', error);
+            toast({
+              title: "Verification Failed",
+              description: "Payment verification failed. Please contact support.",
+              variant: "destructive",
+            });
+          } finally {
+            setIsCheckingOut(false);
+          }
+        },
+        onFailure: (error: any) => {
+          console.error('Payment failed:', error);
+          toast({
+            title: "Payment Failed",
+            description: error.error?.description || "Payment was unsuccessful. Please try again.",
+            variant: "destructive",
+          });
+          setIsCheckingOut(false);
+        },
+      });
+    } catch (error) {
+      console.error('Checkout error:', error);
+      toast({
+        title: "Checkout Failed",
+        description: error instanceof Error ? error.message : "Failed to initiate checkout. Please try again.",
+        variant: "destructive",
+      });
+      setIsCheckingOut(false);
     }
   };
 
@@ -330,14 +402,10 @@ const Cart = () => {
                   
                   <Button 
                     className="w-full bg-[#81715D] hover:bg-[#97816B] text-[#191919] font-heading mt-6"
-                    onClick={() => {
-                      toast({
-                        title: "Checkout Coming Soon!",
-                        description: "Checkout functionality will be available soon.",
-                      });
-                    }}
+                    onClick={handleCheckout}
+                    disabled={isCheckingOut}
                   >
-                    Proceed to Checkout
+                    {isCheckingOut ? 'Processing...' : 'Proceed to Checkout'}
                   </Button>
 
                   <div className="text-center pt-4">
